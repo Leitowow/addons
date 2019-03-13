@@ -1,0 +1,262 @@
+------------------------------------------------------------------------
+r812 | arkayenro | 2019-01-26 11:20:24 +0000 (Sat, 26 Jan 2019) | 18 lines
+Changed paths:
+   M /trunk/ArkInventory.toc
+   M /trunk/VersionHistory.txt
+
+*3.08.21 (26-JAN-2019)*
+ * changed - borders for locked slots are now desaturated the same as the icons
+ * changed - any system or non purchased bag changer slot (includes vault "tabs") will now have an artifact coloured border (if you have item borders enabled)
+ * fixed - the borders for the bag changer slots will now disappear when the item border style is set to None
+ * changed - the fade value for the vault changer tabs has been lowered to make it more obvious which tab is current
+ * changed - config > controls options moved to profiles to make it more obvious that they are the profile settings
+ * fixed - issue with changes made in config > custom categories not updating config > settings > category sets > custom categories
+ * fixed - issue with changes made in config > rules not updating config > settings > category sets > rules
+ * removed - cleaned/removed old ace profile entries from saved variables file
+ * fixed - issue with changing profiles not resetting everything it should have
+ * fixed - issue with bank window shifting between offline to online and not being able to click on the items
+ * restored - a set amount of non tainted usable item slots for the backpack are pre-built to cater for entering the world when in combat
+ * fixed - potential taint issue in the junksell code
+ * changed - lowered the yield timer for junksell to speed it up
+ * fixed - added extra logic to some of the item frame functions to ensure they dont run unless they are passed an arkinventory frame
+ * added - extra api functions for other mods
+ * other - CanIMogIt users will need to move or copy Addons\ArkInventory\Plugins\CanIMogIt\arkinventory.lua to Addons\CanIMogIt\Plugins\arkinventory.lua - at least until the CanIMogIt addon has been updated to match the new code
+
+------------------------------------------------------------------------
+r811 | arkayenro | 2019-01-23 10:26:21 +0000 (Wed, 23 Jan 2019) | 18 lines
+Changed paths:
+   M /trunk/ArkInventory.lua
+   M /trunk/ArkInventory.toc
+   M /trunk/ArkInventoryAPI.lua
+   A /trunk/Plugins
+   A /trunk/Plugins/CanIMogIt
+   A /trunk/Plugins/CanIMogIt/arkinventory.lua
+   M /trunk/VersionHistory.txt
+
+*3.08.21 (xx-xxx-2019)*
+ * changed - borders for locked slots are now desaturated the same as the icons
+ * changed - any system or non purchased bag changer slot (includes vault "tabs") will now have an artifact coloured border (if you have item borders enabled)
+ * fixed - the borders for the bag changer slots will now disappear when the item border style is set to None
+ * changed - the fade value for the vault changer tabs has been lowered to make it more obvious which tab is current
+ * changed - config > controls options moved to profiles to make it more obvious that they are the profile settings
+ * fixed - issue with changes made in config > custom categories not updating config > settings > category sets > custom categories
+ * fixed - issue with changes made in config > rules not updating config > settings > category sets > rules
+ * removed - cleaned/removed old ace profile entries from saved variables file
+ * fixed - issue with changing profiles not resetting everything it should have
+ * fixed - issue with bank window shifting between offline to online and not being able to click on the items
+ * restored - a set amount of non tainted usable item slots for the backpack are pre-built to cater for entering the world when in combat
+ * fixed - potential taint issue in the junksell code
+ * changed - lowered the yield timer for junksell to speed it up
+ * fixed - added extra logic to some of the item frame functions to ensure they dont run unless they are passed an arkinventory frame
+ * added - extra api functions for other mods
+ * other - CanIMogIt users will need to move/copy Addons\ArkInventory\Plugins\CanIMogIt\arkinventory.lua to Addons\CanIMogIt\Plugins\arkinventory.lua - at least until the CanIMogIt addon has been updated to match the new code
+
+------------------------------------------------------------------------
+r810 | arkayenro | 2019-01-19 01:17:05 +0000 (Sat, 19 Jan 2019) | 17 lines
+Changed paths:
+   M /trunk/ArkInventory.toc
+   M /trunk/ArkInventoryAPI.lua
+
+*3.08.21 (xx-xxx-2019)*
+ * changed - borders for locked slots are now desaturated the same as the icons
+ * changed - any system or non purchased bag changer slot (includes vault "tabs") will now have an artifact coloured border (if you have item borders enabled)
+ * fixed - the borders for the bag changer slots will now disappear when the item border style is set to None
+ * changed - the fade value for the vault changer tabs has been lowered to make it more obvious which tab is current
+ * changed - config > controls options moved to profiles to make it more obvious that they are the profile settings
+ * fixed - issue with changes made in config > custom categories not updating config > settings > category sets > custom categories
+ * fixed - issue with changes made in config > rules not updating config > settings > category sets > rules
+ * removed - cleaned/removed old ace profile entries from saved variables file
+ * fixed - issue with changing profiles not resetting everything it should have
+ * fixed - issue with bank window shifting between offline to online and not being able to click on the items
+ * restored - a set amount of non tainted usable item slots for the backpack are pre-built to cater for entering the world when in combat
+ * fixed - potential taint issue in the junksell code
+ * changed - lowered the yield timer for junksell to speed it up
+ * fixed - added extra logic to some of the item frame functions to ensure they dont run unless they are passed an arkinventory frame
+ * added - extra api functions for other mods
+
+------------------------------------------------------------------------
+r809 | arkayenro | 2019-01-17 12:11:39 +0000 (Thu, 17 Jan 2019) | 17 lines
+Changed paths:
+   M /trunk/ArkInventory.lua
+   M /trunk/ArkInventory.toc
+   M /trunk/ArkInventoryAPI.lua
+   M /trunk/VersionHistory.txt
+
+*3.08.21 (xx-xxx-2019)*
+ * changed - borders for locked slots are now desaturated the same as the icons
+ * changed - any system or non purchased bag changer slot (includes vault "tabs") will now have an artifact coloured border (if you have item borders enabled)
+ * fixed - the borders for the bag changer slots will now disappear when the item border style is set to None
+ * changed - the fade value for the vault changer tabs has been lowered to make it more obvious which tab is current
+ * changed - config > controls options moved to profiles to make it more obvious that they are the profile settings
+ * fixed - issue with changes made in config > custom categories not updating config > settings > category sets > custom categories
+ * fixed - issue with changes made in config > rules not updating config > settings > category sets > rules
+ * removed - cleaned/removed old ace profile entries from saved variables file
+ * fixed - issue with changing profiles not resetting everything it should have
+ * fixed - issue with bank window shifting between offline to online and not being able to click on the items
+ * restored - a set amount of non tainted usable item slots for the backpack are pre-built to cater for entering the world when in combat
+ * fixed - potential taint issue in the junksell code
+ * changed - lowered the yield timer for junksell to speed it up
+ * fixed - added extra logic to some of the item frame functions to ensure they dont run unless they are passed an arkinventory frame
+ * added - extra api functions for other mods
+
+------------------------------------------------------------------------
+r808 | arkayenro | 2019-01-17 08:32:41 +0000 (Thu, 17 Jan 2019) | 16 lines
+Changed paths:
+   M /trunk/ArkInventory.lua
+   M /trunk/ArkInventory.toc
+   M /trunk/ArkInventoryAPI.lua
+   M /trunk/ArkInventoryStorage.lua
+   M /trunk/VersionHistory.txt
+
+*3.08.21 (xx-xxx-2019)*
+ * changed - borders for locked slots are now desaturated the same as the icons
+ * changed - any system or non purchased bag changer slot (includes vault "tabs") will now have an artifact coloured border (if you have item borders enabled)
+ * fixed - the borders for the bag changer slots will now disappear when the item border style is set to None
+ * changed - the fade value for the vault changer tabs has been lowered to make it more obvious which tab is current
+ * changed - config > controls options moved to profiles to make it more obvious that they are the profile settings
+ * fixed - issue with changes made in config > custom categories not updating config > settings > category sets > custom categories
+ * fixed - issue with changes made in config > rules not updating config > settings > category sets > rules
+ * removed - cleaned/removed old ace profile entries from saved variables file
+ * fixed - issue with changing profiles not resetting everything it should have
+ * fixed - issue with bank window shifting between offline to online and not being able to click on the items
+ * restored - a set amount of non tainted usable item slots for the backpack are pre-built to cater for entering the world when in combat
+ * fixed - potential taint issue in the junksell code
+ * changed - lowered the yield timer for junksell to speed it up
+ * fixed - added extra logic to some of the item frame functions to ensure they dont run unless they are passed an arkinventory frame
+
+------------------------------------------------------------------------
+r807 | arkayenro | 2019-01-16 09:12:40 +0000 (Wed, 16 Jan 2019) | 17 lines
+Changed paths:
+   M /trunk/ArkInventory.lua
+   M /trunk/ArkInventory.toc
+   M /trunk/VersionHistory.txt
+
+*3.08.21 (xx-xxx-2019)*
+ * changed - borders for locked slots are now desaturated the same as the icons
+ * changed - any system or non purchased bag changer slot (includes vault "tabs") will now have an artifact coloured border (if you have item borders enabled)
+ * fixed - the borders for the bag changer slots will now disappear when the item border style is set to None
+ * changed - the fade value for the vault changer tabs has been lowered to make it more obvious which tab is current
+ * changed - config > controls options moved to profiles to make it more obvious that they are the profile settings
+ * fixed - issue with changes made in config > custom categories not updating config > settings > category sets > custom categories
+ * fixed - issue with changes made in config > rules not updating config > settings > category sets > rules
+ * removed - cleaned/removed old ace profile entries from saved variables file
+ * fixed - issue with changing profiles not resetting everything it should have
+ * fixed - issue with bank window shifting between offline to online and not being able to click on the items
+ * restored - a set amount of non tainted usable item slots for the backpack are pre-built to cater for entering the world when in combat
+ * fixed - potential taint issue in the junksell code
+ * changed - lowered the yield timer for junksell to speed it up
+ * fixed - added extra logic to some of the item frame functions to ensure they dont run unless they are passed a valid frame
+ * alpha - added diagnostic output to help resolve a restack issue
+
+------------------------------------------------------------------------
+r806 | arkayenro | 2019-01-15 06:40:28 +0000 (Tue, 15 Jan 2019) | 15 lines
+Changed paths:
+   M /trunk/ArkInventory.lua
+   M /trunk/ArkInventory.toc
+
+*3.08.21 (xx-xxx-2019)*
+ * changed - borders for locked slots are now desaturated the same as the icons
+ * changed - any system or non purchased bag changer slot (includes vault "tabs") will now have an artifact coloured border (if you have item borders enabled)
+ * fixed - the borders for the bag changer slots will now disappear when the item border style is set to None
+ * changed - the fade value for the vault changer tabs has been lowered to make it more obvious which tab is current
+ * changed - config > controls options moved to profiles to make it more obvious that they are the profile settings
+ * fixed - issue with changes made in config > custom categories not updating config > settings > category sets > custom categories
+ * fixed - issue with changes made in config > rules not updating config > settings > category sets > rules
+ * removed - cleaned/removed old ace profile entries from saved variables file
+ * fixed - issue with changing profiles not resetting everything it should have
+ * fixed - issue with bank window shifting between offline to online and not being able to click on the items
+ * restored - a set amount of non tainted usable item slots for the backpack are pre-built to cater for entering the world when in combat
+ * fixed - potential taint issue in the junksell code
+ * changed - lowered the yield timer for junksell to speed it up
+
+------------------------------------------------------------------------
+r805 | arkayenro | 2019-01-13 06:41:08 +0000 (Sun, 13 Jan 2019) | 15 lines
+Changed paths:
+   M /trunk/ArkInventory.lua
+   M /trunk/ArkInventory.toc
+   M /trunk/ArkInventoryJunk.lua
+   M /trunk/ArkInventoryRestack.lua
+   M /trunk/ArkInventoryTooltip.lua
+   M /trunk/VersionHistory.txt
+
+*3.08.21 (xx-xxx-2019)*
+ * changed - borders for locked slots are now desaturated the same as the icons
+ * changed - any system or non purchased bag changer slot (includes vault "tabs") will now have an artifact coloured border (if you have item borders enabled)
+ * fixed - the borders for the bag changer slots will now disappear when the item border style is set to None
+ * changed - the fade value for the vault changer tabs has been lowered to make it more obvious which tab is current
+ * changed - config > controls options moved to profiles to make it more obvious that they are the profile settings
+ * fixed - issue with changes made in config > custom categories not updating config > settings > category sets > custom categories
+ * fixed - issue with changes made in config > rules not updating config > settings > category sets > rules
+ * removed - cleaned/removed old ace profile entries from saved variables file
+ * fixed - issue with changing profiles not resetting everything it should have
+ * fixed - issue with bank window shifting between offline to online and not being able to click on the items
+ * restored - a set amount of non tainted usable item slots for the backpack are pre-built to cater for entering the world when in combat
+ * fixed - potential taint issue in the junksell code
+ * changed - lowered the yield timer for junksell to speed it up
+
+------------------------------------------------------------------------
+r804 | arkayenro | 2019-01-04 08:48:44 +0000 (Fri, 04 Jan 2019) | 13 lines
+Changed paths:
+   M /trunk/ArkInventory.lua
+   M /trunk/ArkInventory.toc
+   M /trunk/ArkInventoryAPI.lua
+   M /trunk/ArkInventoryConst.lua
+   M /trunk/ArkInventoryUpgrades.lua
+   M /trunk/Modules/ArkInventoryConfig/ArkInventoryConfig.lua
+   M /trunk/VersionHistory.txt
+
+*3.08.21 (xx-xxx-201x)*
+ * changed - borders for locked slots are now desaturated the same as the icons
+ * changed - any system or non purchased bag changer slot (includes vault "tabs") will now have an artifact coloured border (if you have item borders enabled)
+ * fixed - the borders for the bag changer slots will now disappear when the item border style is set to None
+ * changed - the fade value for the vault changer tabs has been lowered to make it more obvious which tab is current
+ * changed - config > controls options moved to profiles to make it more obvious that they are the profile settings
+ * fixed - issue with changes made in config > custom categories not updating config > settings > category sets > custom categories
+ * fixed - issue with changes made in config > rules not updating config > settings > category sets > rules
+ * removed - cleaned/removed old ace profile entries from saved variables file
+ * fixed - issue with changing profiles not resetting everything it should have
+ * fixed - issue with bank window shifting between offline to online and not being able to click on the items
+ * restored - a set amount of non tainted usable item slots for the backpack are pre-built to cater for entering the world when in combat
+
+------------------------------------------------------------------------
+r803 | arkayenro | 2019-01-02 13:05:31 +0000 (Wed, 02 Jan 2019) | 11 lines
+Changed paths:
+   M /trunk/ArkInventory.toc
+   M /trunk/ArkInventoryCollectionPet.lua
+   M /trunk/ArkInventoryUpgrades.lua
+   M /trunk/VersionHistory.txt
+
+*3.08.21 (xx-xxx-201x)*
+ * changed - borders for locked slots are now desaturated the same as the icons
+ * changed - any system or non purchased bag changer slot (includes vault "tabs") will now have an artifact coloured border (if you have item borders enabled)
+ * fixed - the borders for the bag changer slots will now disappear when the item border style is set to None
+ * changed - the fade value for the vault changer tabs has been lowered to make it more obvious which tab is current
+ * changed - config > controls options moved to profiles to make it more obvious that they are the profile settings
+ * fixed - issue with changes made in config > custom categories not updating config > settings > category sets > custom categories
+ * fixed - issue with changes made in config > rules not updating config > settings > category sets > rules
+ * removed - cleaned/removed old ace profile entries from saved variables file
+ * alpha fix - issue with post load function
+
+------------------------------------------------------------------------
+r802 | arkayenro | 2018-12-31 00:42:52 +0000 (Mon, 31 Dec 2018) | 10 lines
+Changed paths:
+   M /trunk/ArkInventory.lua
+   M /trunk/ArkInventory.toc
+   M /trunk/ArkInventory.xml
+   M /trunk/ArkInventoryLDB.lua
+   M /trunk/ArkInventoryUpgrades.lua
+   M /trunk/Modules/ArkInventoryConfig/ArkInventoryConfig.lua
+   M /trunk/VersionHistory.txt
+
+*3.08.21 (xx-xxx-201x)*
+ * changed - borders for locked slots are now desaturated the same as the icons
+ * changed - any system or non purchased bag changer slot (includes vault "tabs") will now have an artifact coloured border (if you have item borders enabled)
+ * fixed - the borders for the bag changer slots will now disappear when the item border style is set to None
+ * changed - the fade value for the vault changer tabs has been lowered to make it more obvious which tab is current
+ * changed - config > controls options moved to profiles to make it more obvious that they are the profile settings
+ * fixed - issue with changes made in config > custom categories not updating config > settings > category sets > custom categories
+ * fixed - issue with changes made in config > rules not updating config > settings > category sets > rules
+ * removed - cleaned/removed old ace profile entries from saved variables file
+
+------------------------------------------------------------------------
+

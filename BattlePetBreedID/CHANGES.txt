@@ -1,0 +1,7 @@
+changeset:   190:6c07b9bc1579
+tag:         v1.13.4
+user:        Caleb Atherton <atcaleb@twitch.tv>
+date:        Sat Feb 23 02:08:54 2019 -0500
+summary:     Fixed a typo in the previous version that caused the addon to not load properly.
+
+

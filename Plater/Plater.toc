@@ -1,0 +1,19 @@
+## Interface: 80100
+## Title: Plater
+## Notes: Config the new name plates
+## SavedVariables: PlaterDB
+## SavedVariablesPerCharacter: PlaterDBChr
+
+#@no-lib-strip@
+libs\libs.xml
+#@end-no-lib-strip@
+
+Plater_DefaultSettings.lua
+
+Plater.lua
+Plater_OptionsPanel.lua
+Plater_ScriptingPanels.lua
+Plater_ScriptLibrary.lua
+Plater_AnimationEditor.lua
+Plater_ChangeLog.lua
+Plater_Docs.lua

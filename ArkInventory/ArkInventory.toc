@@ -1,0 +1,76 @@
+## Interface: 80100
+
+## Title: Ark Inventory
+## Title-zhCN: [背包]Ark Inventory 整合背包银行
+## Author: Arkayenro - Khaz'goroth
+## Email: arkayenro at gmail dot com
+## Version: 30821
+## X-ReleaseType: 
+## SavedVariables: ARKINVDB
+
+## Notes: Allows you to view all items from all your characters on the same account, when-ever and where-ever you want.
+
+## DefaultState: Enabled
+## LoadOnDemand: 0
+
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+
+## OptionalDeps: Ace3, AceGUI-3.0-SharedMediaWidgets, LibPeriodicTable-3.1, LibSharedMedia-3.0, LibDataBroker-1.1, LibDialog-1.0, BattlePetBreedID
+## X-Embeds: Ace3, AceGUI-3.0-SharedMediaWidgets, LibPeriodicTable-3.1, LibSharedMedia-3.0, LibDataBroker-1.1, LibDialog-1.0
+
+## X-Category: Inventory
+## X-Website: https://github.com/arkayenro/arkinventory
+
+Libs\LibStub\lib.xml
+Libs\CallBackHandler\lib.xml
+
+#@no-lib-strip@
+ArkInventoryExternals.xml
+#@end-no-lib-strip@
+ArkInventoryExternals.lua
+
+Libs\ArkDewdrop\lib.xml
+Libs\LibDataBroker\lib.xml
+
+ArkInventoryConst.lua
+ArkInventoryCPU.lua
+ArkInventoryCodex.lua
+
+Locale\locale.xml
+
+ArkInventory.lua
+ArkInventoryAPI.lua
+
+ArkInventoryCompanion.lua
+
+ArkInventoryStorage.lua
+ArkInventoryRestack.lua
+ArkInventoryMenu.lua
+ArkInventoryRules.lua
+ArkInventorySearch.lua
+ArkInventoryUpgrades.lua
+
+ArkInventoryCollectionPet.lua
+ArkInventoryCollectionMount.lua
+ArkInventoryCollectionToybox.lua
+ArkInventoryCollectionHeirloom.lua
+ArkInventoryCollectionReputation.lua
+ArkInventoryCollectionCurrency.lua
+
+ArkInventoryTooltip.lua
+ArkInventoryMoney.lua
+ArkInventoryMedia.lua
+
+ArkInventoryJunk.lua
+
+ArkInventory.xml
+
+ArkInventoryConfig.lua
+ArkInventoryLDB.lua
+
+ArkInventoryStaticPopups.lua
+
+ArkInventoryTranslate.lua
+
+ArkInventoryRealms.lua
