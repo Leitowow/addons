@@ -1,3 +1,5 @@
+# 使用说明
+![image](https://github.com/Leitowow/addons/blob/master/pic/download.jpg)
 # 总览
 
 ##### AdvancedInterfaceOptions - WOW客户端高级设置
