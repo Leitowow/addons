@@ -1,0 +1,52 @@
+lightweight tag 3b98506f639acd26a9bd5a76e36cceb1ae7b9b5b 1.2
+Author:	vendethiel <vendethiel@hotmail.fr>
+Date:	Sat Nov 17 19:43:05 2018 +0100
+
+commit 3b98506f639acd26a9bd5a76e36cceb1ae7b9b5b
+Author: vendethiel <vendethiel@hotmail.fr>
+Date:   Sat Nov 17 19:43:05 2018 +0100
+
+    fix wowace-54, fix #23
+
+commit b5a701cb9ab8d52fbf50d68e3dc390a9d6349c54
+Author: vendethiel <vendethiel@hotmail.fr>
+Date:   Sat Nov 17 19:42:41 2018 +0100
+
+    small improvement to skill history module
+
+commit f6442d87e1cc268948dd8f247a754321326fc7b1
+Author: vendethiel <vendethiel@hotmail.fr>
+Date:   Sat Nov 17 19:34:32 2018 +0100
+
+    fix wowace-55, fix #24
+
+commit 8bc14444793570155936f1f47ca15ae638f1bd95
+Author: vendethiel <vendethiel@hotmail.fr>
+Date:   Sat Nov 17 19:32:31 2018 +0100
+
+    fix wowace-51, fix #22
+
+commit 80dfd0fd3635f500c24e619060e91ed83c8c3c75
+Author: vendethiel <vendethiel@hotmail.fr>
+Date:   Sat Nov 17 19:31:59 2018 +0100
+
+    minor optimization in UNIT_AURA
+
+commit 0b753a328e7f764bc2576adcd2b5361d341dc3a0
+Author: vendethiel <vendethiel@hotmail.fr>
+Date:   Sat Nov 17 19:31:27 2018 +0100
+
+    transparent castbars as asked by dewun
+
+commit 6178619661c3118316d1b663799542328ec9d8a8
+Author: vendethiel <vendethiel@hotmail.fr>
+Date:   Sat Nov 17 19:22:38 2018 +0100
+
+    fix wowace-58
+
+commit 9dd2f0ba9425fac5d8d058451a4621b209c82ad3
+Author: vendethiel <vendethiel@hotmail.fr>
+Date:   Sat Nov 17 19:22:13 2018 +0100
+
+    fix spec detection on reload
+
