@@ -235,8 +235,9 @@ function Plater.OpenOptionsPanel()
 	DF:BuildStatusbarAuthorInfo (statusBar)
 	
 	--wago.io support
-	local wagoDesc = DF:CreateLabel (statusBar, "BREAKING NEWS: |cFFFFFF00WAGO.IO|r released support for Plater! You can get and share profiles and scripts right now!")
+	local wagoDesc = DF:CreateLabel (statusBar, "Important: unexpected issues may occur due to several bugs on the client itself introduced on 8.1.5")
 	wagoDesc.textcolor = "white"
+	wagoDesc.textsize = 11
 	wagoDesc:SetPoint ("left", statusBar.DiscordTextBox, "right", 10, 0)
 	
 	wagoDesc.Anim = DF:CreateAnimationHub (wagoDesc)
@@ -451,6 +452,20 @@ function Plater.OpenOptionsPanel()
 			local openManagementProfileButton = DF:CreateButton (profilesFrame, profilesFrame.OpenProfileManagement, 160, 20, "Open Profile Settings", -1, nil, nil, "ProfileSettingsButton", nil, nil, DF:GetTemplate ("button", "OPTIONS_BUTTON_TEMPLATE"), DF:GetTemplate ("font", "PLATER_BUTTON"))
 			openManagementProfileButton:SetPoint ("topleft", importProfileButton, "bottomleft", 0, -10)
 			
+			local moreProfilesLabel = DF:CreateLabel (profilesFrame, "Get more profiles at Wago.io:", DF:GetTemplate ("font", "PLATER_BUTTON"))
+			moreProfilesLabel:SetPoint ("topleft", openManagementProfileButton, "bottomleft", 0, -20)
+			
+			local moreProfilesTextEntry = DF:CreateTextEntry (profilesFrame, function()end, 160, 20, "moreProfilesTextEntry", _, _, options_dropdown_template)
+			moreProfilesTextEntry:SetPoint ("topleft", moreProfilesLabel, "bottomleft", 0, -2)
+			moreProfilesTextEntry:SetText ("https://wago.io/plater")
+			
+			moreProfilesTextEntry:SetHook ("OnEditFocusGained", function()
+				moreProfilesTextEntry:HighlightText()
+			end)
+			
+			profilesFrame.moreProfilesLabel = moreProfilesLabel
+			profilesFrame.moreProfilesTextEntry = moreProfilesTextEntry
+			
 			--text editor
 			local luaeditor_backdrop_color = {.2, .2, .2, .5}
 			local luaeditor_border_color = {0, 0, 0, 1}
@@ -489,6 +504,10 @@ function Plater.OpenOptionsPanel()
 			profilesFrame.NewProfileTextEntry = newProfileNameTextEntry
 			profilesFrame.NewProfileLabel:Hide()
 			profilesFrame.NewProfileTextEntry:Hide()
+			
+			
+			
+			
 	end
 -------------------------
 -- fun��es gerais dos dropdowns ~dropdowns
@@ -1045,6 +1064,7 @@ local debuff_options = {
 		min = -200,
 		max = 200,
 		step = 1,
+		usedecimals = true,
 		name = "X Offset",
 		desc = "X Offset",
 	},
@@ -1059,6 +1079,7 @@ local debuff_options = {
 		min = -200,
 		max = 200,
 		step = 1,
+		usedecimals = true,
 		name = "Y Offset",
 		desc = "Y Offset",
 	},
@@ -1097,6 +1118,7 @@ local debuff_options = {
 		min = -200,
 		max = 200,
 		step = 1,
+		usedecimals = true,
 		name = "X Offset",
 		desc = "X Offset",
 	},
@@ -1111,6 +1133,7 @@ local debuff_options = {
 		min = -200,
 		max = 200,
 		step = 1,
+		usedecimals = true,
 		name = "Y Offset",
 		desc = "Y Offset",
 	},
@@ -1221,8 +1244,9 @@ local debuff_options = {
 		min = -20,
 		max = 20,
 		step = 1,
+		usedecimals = true,
 		name = "X Offset",
-		desc = "Slightly move the text horizontally.",
+		desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 	},
 	--y offset
 	{
@@ -1235,8 +1259,9 @@ local debuff_options = {
 		min = -20,
 		max = 20,
 		step = 1,
+		usedecimals = true,
 		name = "Y Offset",
-		desc = "Slightly move the text vertically.",
+		desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 	},
 	
 	{type = "blank"},
@@ -1321,8 +1346,9 @@ local debuff_options = {
 		min = -20,
 		max = 20,
 		step = 1,
+		usedecimals = true,
 		name = "X Offset",
-		desc = "Slightly move the text horizontally.",
+		desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 	},
 	--y offset
 	{
@@ -1335,8 +1361,9 @@ local debuff_options = {
 		min = -20,
 		max = 20,
 		step = 1,
+		usedecimals = true,
 		name = "Y Offset",
-		desc = "Slightly move the text vertically.",
+		desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 	},
 	
 	{type = "breakline"},
@@ -3302,6 +3329,7 @@ Plater.CreateAuraTesting()
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "X Offset",
 				desc = "Slightly move horizontally.",
 			},
@@ -3316,6 +3344,7 @@ Plater.CreateAuraTesting()
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
 				desc = "Slightly move vertically.",
 			},
@@ -3734,8 +3763,9 @@ do
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
-				desc = "Adjusts the position on the Y axis.",
+				desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			
 			{type = "blank"},
@@ -4103,8 +4133,9 @@ do
 				min = -128,
 				max = 128,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
-				desc = "Adjusts the cast bar position on the Y axis.",
+				desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			--hide castbar from blizzard
 			{
@@ -4202,8 +4233,9 @@ do
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "X Offset",
-				desc = "Slightly move the text horizontally.",
+				desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			--spell name text anchor x offset
 			{
@@ -4216,8 +4248,9 @@ do
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
-				desc = "Slightly move the text vertically.",
+				desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			
 			{type = "breakline"},
@@ -4316,8 +4349,9 @@ do
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "X Offset",
-				desc = "Slightly move the text horizontally.",
+				desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			--cast time anchor x offset
 			{
@@ -4330,8 +4364,9 @@ do
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
-				desc = "Slightly move the text vertically.",
+				desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			
 			
@@ -4461,8 +4496,9 @@ do
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "X Offset",
-				desc = "Slightly move the text horizontally.",
+				desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			--percent anchor x offset
 			{
@@ -4475,8 +4511,9 @@ do
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
-				desc = "Slightly move the text vertically.",
+				desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},			
 			
 			{type = "breakline"},
@@ -4665,8 +4702,9 @@ do
 				min = -20,
 				max = 20,
 				step = 1,
+				usedecimals = true,
 				name = "X Offset",
-				desc = "Slightly move the text horizontally.",
+				desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			--percent anchor x offset
 			{
@@ -4679,8 +4717,9 @@ do
 				min = -20,
 				max = 20,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
-				desc = "Slightly move the text vertically.",
+				desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			
 			--class resources
@@ -4728,6 +4767,7 @@ do
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				nocombat = true,
 				name = "Y OffSet",
 				desc = "Y Offset when resource bar are anchored to your personal bar",
@@ -4743,6 +4783,7 @@ do
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				nocombat = true,
 				name = "Y OffSet on Target",
 				desc = "Y Offset when the resource are anchored on your current target",
@@ -4758,6 +4799,7 @@ do
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				nocombat = true,
 				name = "Offset if Buff is Shown",
 				desc = "Add this to 'Y OffSet on Target' if there is buffs or debuffs shown in the nameplate",
@@ -5318,13 +5360,13 @@ local relevance_options = {
 
 		{
 			type = "toggle",
-			get = function() return Plater.db.profile.hide_enemy_castbars end,
+			get = function() return Plater.db.profile.show_interrupt_author end,
 			set = function (self, fixedparam, value) 
-				Plater.db.profile.hide_enemy_castbars = value
+				Plater.db.profile.show_interrupt_author = value
 				Plater.RefreshDBUpvalues()
 			end,
-			name = "Hide Enemy Cast Bar",
-			desc = "Hide Enemy Cast Bar",
+			name = "Show Interrupt Author",
+			desc = "Show Interrupt Author",
 		},
 		{
 			type = "toggle",
@@ -5642,6 +5684,7 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
 			desc = "X Offset",
 		},
@@ -5655,6 +5698,7 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
 			desc = "Y Offset",
 		},
@@ -5757,6 +5801,7 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
 			desc = "Slightly move horizontally.",
 		},
@@ -5771,6 +5816,7 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
 			desc = "Slightly move vertically.",
 		},
@@ -5813,6 +5859,7 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
 			desc = "Slightly move horizontally.",
 		},
@@ -5827,6 +5874,7 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
 			desc = "Slightly move vertically.",
 		},
@@ -5974,8 +6022,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Adjusts the position on the Y axis.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		
 		{type = "breakline"},
@@ -6182,8 +6231,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--npc name anchor x offset
 		{
@@ -6196,8 +6246,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},	
 		
 		--cast text size
@@ -6286,8 +6337,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--spell name text anchor x offset
 		{
@@ -6300,8 +6352,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		
 		
@@ -6400,8 +6453,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--cast time anchor x offset
 		{
@@ -6414,8 +6468,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},		
 
 		{type = "breakline"},
@@ -6576,8 +6631,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--percent anchor x offset
 		{
@@ -6590,8 +6646,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		
 
@@ -6691,8 +6748,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--level anchor x offset
 		{
@@ -6705,8 +6763,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		
 		
@@ -6802,8 +6861,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Adjusts the position on the Y axis.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},		
 		
 		{type = "blank"},
@@ -6820,8 +6880,9 @@ local relevance_options = {
 			min = -128,
 			max = 128,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Adjusts the cast bar position on the Y axis.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},			
 		
 		{type = "breakline"},
@@ -7029,8 +7090,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--npc name anchor x offset
 		{
@@ -7043,8 +7105,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},	
 		
 		{type = "breakline"},
@@ -7132,8 +7195,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--spell name text anchor x offset
 		{
@@ -7146,8 +7210,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		
 		--level text settings
@@ -7247,8 +7312,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--cast time anchor x offset
 		{
@@ -7261,8 +7327,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 
 		{type = "breakline"},
@@ -7424,8 +7491,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--percent anchor x offset
 		{
@@ -7438,8 +7506,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		
 		{type = "breakline"},
@@ -7539,8 +7608,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--level anchor x offset
 		{
@@ -7553,8 +7623,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},		
 
 	}
@@ -7672,8 +7743,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Adjusts the position on the Y axis.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		
 		{type = "blank"},
@@ -7964,8 +8036,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--npc name anchor x offset
 		{
@@ -7978,8 +8051,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},	
 		
 		{type = "breakline"},
@@ -8067,8 +8141,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--spell name text anchor x offset
 		{
@@ -8081,8 +8156,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 
 		{type = "blank"},
@@ -8179,8 +8255,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--cast time anchor x offset
 		{
@@ -8193,8 +8270,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 
 		{type = "breakline"},
@@ -8356,8 +8434,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--percent anchor x offset
 		{
@@ -8370,8 +8449,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 	
 		{type = "breakline"},
@@ -8471,8 +8551,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "X Offset",
-			desc = "Slightly move the text horizontally.",
+			desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		--level anchor x offset
 		{
@@ -8485,8 +8566,9 @@ local relevance_options = {
 			min = -100,
 			max = 100,
 			step = 1,
+			usedecimals = true,
 			name = "Y Offset",
-			desc = "Slightly move the text vertically.",
+			desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 		},
 		
 	}
@@ -8591,8 +8673,9 @@ local relevance_options = {
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
-				desc = "Adjusts the position on the Y axis.",
+				desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 
 			{type = "blank"},
@@ -8609,8 +8692,9 @@ local relevance_options = {
 				min = -128,
 				max = 128,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
-				desc = "Adjusts the cast bar position on the Y axis.",
+				desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},				
 			
 			{type = "blank"},
@@ -8900,8 +8984,9 @@ local relevance_options = {
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "X Offset",
-				desc = "Slightly move the text horizontally.",
+				desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			--npc name anchor x offset
 			{
@@ -8914,8 +8999,9 @@ local relevance_options = {
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
-				desc = "Slightly move the text vertically.",
+				desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},	
 			
 			{type = "breakline"},
@@ -9003,8 +9089,9 @@ local relevance_options = {
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "X Offset",
-				desc = "Slightly move the text horizontally.",
+				desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			--spell name text anchor x offset
 			{
@@ -9017,8 +9104,9 @@ local relevance_options = {
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
-				desc = "Slightly move the text vertically.",
+				desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			
 			{type = "blank"},
@@ -9117,8 +9205,9 @@ local relevance_options = {
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "X Offset",
-				desc = "Slightly move the text horizontally.",
+				desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			--cast time anchor x offset
 			{
@@ -9131,8 +9220,9 @@ local relevance_options = {
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
-				desc = "Slightly move the text vertically.",
+				desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},			
 			
 			{type = "breakline"},
@@ -9295,8 +9385,9 @@ local relevance_options = {
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "X Offset",
-				desc = "Slightly move the text horizontally.",
+				desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			--percent anchor x offset
 			{
@@ -9309,8 +9400,9 @@ local relevance_options = {
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
-				desc = "Slightly move the text vertically.",
+				desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 
 			--level text settings
@@ -9409,8 +9501,9 @@ local relevance_options = {
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "X Offset",
-				desc = "Slightly move the text horizontally.",
+				desc = "Adjust the position on the X axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 			--level anchor x offset
 			{
@@ -9423,8 +9516,9 @@ local relevance_options = {
 				min = -100,
 				max = 100,
 				step = 1,
+				usedecimals = true,
 				name = "Y Offset",
-				desc = "Slightly move the text vertically.",
+				desc = "Adjust the position on the Y axis.\n\n|cFFFFFF00Important|r: right click to type the value.",
 			},
 
 		}
@@ -9506,12 +9600,20 @@ local relevance_options = {
 			get = function() return Plater.db.profile.use_ui_parent end,
 			set = function (self, fixedparam, value) 
 				Plater.db.profile.use_ui_parent = value
-				
+
+				if (value) then
+					Plater.db.profile.use_ui_parent_just_enabled = true
+				else
+					Plater.db.profile.use_ui_parent_just_enabled = false
+				end
+
 				Plater:Msg ("this setting require a /reload to take effect.")
 			end,
 			name = "Parent to UIParent",
 			desc = "Nameplates anchor into the UIParent instead of the 3D World Frame.\n\nThis allow having cast bars and debuffs in front of other frames.\n\n|cFFFFFF00Important|r: require /reload after changing this setting.",
 		},
+		
+		{type = "blank"},
 		
 		{
 			type = "select",
@@ -9520,7 +9622,7 @@ local relevance_options = {
 			name = "Base Strata",
 			desc = "Which strata the unit frame will be placed in.",
 		},
-
+		
 		{
 			type = "select",
 			get = function() return Plater.db.profile.ui_parent_cast_strata end,
@@ -9536,6 +9638,16 @@ local relevance_options = {
 			name = "Aura Frames Strata",
 			desc = "Which strata aura frames will be placed in.",
 		},
+		
+		{
+			type = "select",
+			get = function() return Plater.db.profile.ui_parent_target_strata end,
+			values = function() return build_framelevel_table ("ui_parent_target_strata") end,
+			name = "Current Target Strata",
+			desc = "Which strata the nameplate of the current target is placed in.",
+		},
+
+		{type = "blank"},
 		
 		{
 			type = "range",
@@ -10115,7 +10227,7 @@ local relevance_options = {
 			step = 0.1,
 			thumbscale = 1.7,
 			usedecimals = true,
-			name = "Distance Scale" .. CVarIcon,
+			name = "Min Scale" .. CVarIcon,
 			desc = "Scale applied when the nameplate is far away from the camera.\n\n|cFFFFFF00Important|r: is the distance from the camera and |cFFFF4444not|r the distance from your character.\n\n|cFFFFFFFFDefault: 0.8|r" .. CVarDesc,
 			nocombat = true,
 		},
@@ -10389,7 +10501,8 @@ local relevance_options = {
 			min = -20,
 			max = 20,
 			step = 1,
-			name = "X OffSet",
+			usedecimals = true,
+			name = "X Offset",
 			desc = "Slightly adjust the entire nameplate.",
 		},
 		{
@@ -10403,7 +10516,8 @@ local relevance_options = {
 			min = -20,
 			max = 20,
 			step = 1,
-			name = "Y OffSet",
+			usedecimals = true,
+			name = "Y Offset",
 			desc = "Slightly adjust the entire nameplate.",
 		},
 		

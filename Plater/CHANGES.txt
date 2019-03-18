@@ -1,25 +1,7 @@
-changeset:   233:685cd35ab1f2
-tag:         v8.1.5.233
+changeset:   237:75174ea2d4c8
+tag:         v8.1.5.237
 user:        Tercioo
-date:        Tue Mar 12 23:21:17 2019 -0300
-summary:     - Importing Scripts and Profiles in wrong tabs now gives errors.
-
-
-changeset:   232:d22a6239d439
-user:        Tercioo
-date:        Mon Mar 11 22:57:52 2019 -0300
-summary:     - Fixed target color script.
-
-
-changeset:   231:2194d56d3f90
-user:        Tercioo
-date:        Sun Mar 10 17:49:08 2019 -0300
-summary:     - Added fadein animation for nameplate added to screen when using UIParenting.
-
-
-changeset:   230:116cd8bca714
-user:        Tercioo
-date:        Sun Mar 10 16:22:43 2019 -0300
-summary:     - Fixed range check when using UIParenting.
+date:        Sat Mar 16 15:50:52 2019 -0300
+summary:     - Added Show Interrupt Author option.
 
 
