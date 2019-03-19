@@ -1,40 +1,10 @@
-lightweight tag c211c39dbb1f18c7db528dfa97f85ac9cc43d8dc v1.10.11
+lightweight tag c9f8bae199256eb09a35c47a1958cf24f2f7c386 v1.11.0
 Author:	Dave Hendler <sollaires@gmail.com>
-Date:	Mon Feb 25 12:11:10 2019 -0800
+Date:	Mon Mar 18 17:16:25 2019 -0700
 
-commit c211c39dbb1f18c7db528dfa97f85ac9cc43d8dc
+commit c9f8bae199256eb09a35c47a1958cf24f2f7c386
 Author: Dave Hendler <sollaires@gmail.com>
-Date:   Mon Feb 25 12:11:10 2019 -0800
+Date:   Mon Mar 18 17:16:25 2019 -0700
 
-    Document support for item links, update version to 1.10.11
-
-commit 57fef66197350b452389ff657c683f25fc0cbc8f
-Author: geheur <dasistkeinnamen@gmail.com>
-Date:   Wed Feb 13 04:53:06 2019 +0000
-
-    Fixed and improved some comments
-
-commit 57fef66197350b452389ff657c683f25fc0cbc8f
-Author: geheur <dasistkeinnamen@gmail.com>
-Date:   Wed Feb 13 04:53:06 2019 +0000
-
-    Fixed and improved some comments
-
-commit e6900e45adff380a40798b6f344b790271a45a9e
-Author: geheur <dasistkeinnamen@gmail.com>
-Date:   Sun Feb 3 05:33:34 2019 +0000
-
-    added in requested changes.
-
-commit d6d2bbe0da1fddfc798acab9c371b2231f2ef439
-Author: geheur <dasistkeinnamen@gmail.com>
-Date:   Wed Jan 30 06:00:30 2019 +0000
-
-    Refactored and cleaned up a bit
-
-commit 8f097c902c0e672063639c1ad4992d27f6cfc4c5
-Author: geheur <dasistkeinnamen@gmail.com>
-Date:   Sat Jan 26 22:53:49 2019 +0000
-
-    Added the ability to link items to '/simc' to have them be included in the output
+    Detect Zandalari Troll Loa, Prot Warriors now have tank role
 

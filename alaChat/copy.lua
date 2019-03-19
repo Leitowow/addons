@@ -34,8 +34,8 @@ local function set(fmt)
 	end
 end
 local function copy_Init()
-	orig_ChatFrame_OnHyperlinkShow=ChatFrame_OnHyperlinkShow;
-	ChatFrame_OnHyperlinkShow=function(chatframe,link,text,button,...)
+	ItemRefTooltip._SetHyperlink=ItemRefTooltip.SetHyperlink;
+	ItemRefTooltip.SetHyperlink=function(self,link)
 		if link=="alaCCopy:-1" then
 			local m=GetMouseFocus();
 			if not m:IsObjectType("FontString") then
@@ -58,9 +58,36 @@ local function copy_Init()
 			insertEditBox(tx);
 			--print(gsub(tx,"\124","__"));
 		else
-			return orig_ChatFrame_OnHyperlinkShow(chatframe,link,text,button,...);
+			return self:_SetHyperlink(link);
 		end
 	end
+	-- orig_ChatFrame_OnHyperlinkShow=ChatFrame_OnHyperlinkShow;
+	-- ChatFrame_OnHyperlinkShow=function(chatframe,link,text,button,...)
+	-- 	if link=="alaCCopy:-1" then
+	-- 		local m=GetMouseFocus();
+	-- 		if not m:IsObjectType("FontString") then
+	-- 			m=m:GetParent();
+	-- 			if not m:IsObjectType("FontString") then
+	-- 				return;
+	-- 			end
+	-- 		end
+	-- 		local tx=m:GetText();
+	-- 		if type(tx)~="string" then
+	-- 			return;
+	-- 		end
+	-- 		--tx=string.gsub(tx,"\124cff%x%x%x%x%x%x\124H[^:]+[1-9-:]+\124h(.*)\124h\124r")
+	-- 		--tx=string.gsub(tx,"\124cffffffff\124H[^:]+[1-9-:]+\124h(.*)\124h\124r","%1");
+	-- 		tx=string.gsub(tx,"\124cff7f7fff\124HalaCCopy:-1\124h**\124h\124r","");
+	-- 		tx=string.gsub(tx,"\124H.-\124h","");
+	-- 		tx=string.gsub(tx,"\124cff%x%x%x%x%x%x","");
+	-- 		tx=string.gsub(tx,"\124h","");
+	-- 		tx=string.gsub(tx,"\124r","");
+	-- 		insertEditBox(tx);
+	-- 		--print(gsub(tx,"\124","__"));
+	-- 	else
+	-- 		return orig_ChatFrame_OnHyperlinkShow(chatframe,link,text,button,...);
+	-- 	end
+	-- end
 	orig_timeStamp=CHAT_TIMESTAMP_FORMAT;
 	hookfCall(InterfaceOptionsSocialPanelTimestamps,"SetValue",function(_,fmt)
 			if fmt=="none" then
