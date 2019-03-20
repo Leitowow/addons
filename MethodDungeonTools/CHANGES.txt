@@ -1,16 +1,132 @@
-lightweight tag e22901c7e077f1a173afcf5784bf90d1cc0b80e7 v2.4.1
+lightweight tag 8c37f7d6148a5eb1b7d72cadfafb223540c1ed65 v2.5.0
 Author:	Nnogga <27819512+nnogga@users.noreply.github.com>
-Date:	Sun Feb 24 22:48:34 2019 +0100
+Date:	Wed Mar 20 16:45:16 2019 +0100
 
-commit e22901c7e077f1a173afcf5784bf90d1cc0b80e7
+commit 8c37f7d6148a5eb1b7d72cadfafb223540c1ed65
 Author: Nnogga <27819512+nnogga@users.noreply.github.com>
-Date:   Sun Feb 24 22:48:34 2019 +0100
+Date:   Wed Mar 20 16:45:16 2019 +0100
+
+    color text opens color picker aswell multiselect
+
+commit f3d6fcd3e0e1234adb79785d0db21a3da5e29d24
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Wed Mar 20 16:39:20 2019 +0100
+
+    color text opens color picker aswell
+
+commit 1c7b6765df8025ec525d3e0f4b957d07fbbcc732
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Wed Mar 20 15:57:17 2019 +0100
+
+    tournament realm teeming updates
+
+commit 1c7b6765df8025ec525d3e0f4b957d07fbbcc732
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Wed Mar 20 15:57:17 2019 +0100
+
+    tournament realm teeming updates
+
+commit 25bdd6691b95253a0ab0b30e20d7ef8b74cda024
+Author: Tarek <tarek.schwarzinger@googlemail.com>
+Date:   Tue Mar 19 15:48:51 2019 +0100
+
+    - Implemented color picked for multi selections
+    - Implemented keeping the color for drag & drop
+
+commit 341001ee1209d386340dda7f66fd9a7b073f81cb
+Author: Tarek <tarek.schwarzinger@googlemail.com>
+Date:   Tue Mar 19 09:46:47 2019 +0100
+
+    - Fixed Merging with colors.
+
+commit 2cbc8094dce6ffd6e91f2240be364d32440ee4fe
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Tue Mar 19 06:10:05 2019 +0100
+
+    tournament realm teeming updates
+
+commit f64a9e66c7d2a36a4564dbddb445a6c56ccb11b9
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Tue Mar 19 01:45:49 2019 +0100
 
     version update
 
-commit a6936b515cd418bd31f941d00e21dfcd80d61bc7
+commit 2b20257eaac3b1db3949a8547acad3d3295b3968
 Author: Nnogga <27819512+nnogga@users.noreply.github.com>
-Date:   Sun Feb 24 22:48:24 2019 +0100
+Date:   Tue Mar 19 01:44:58 2019 +0100
 
-    stormcaller fix
+    initial pull coloring
+
+commit cb39d07b50ee651034c2ae63dbc8ca8e632358b8
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Mon Mar 18 01:10:44 2019 +0100
+
+    revert deletion of g39, added note for world quest shenanigans
+
+commit b1671bab71c9f1a24b853e6c4db7d3dd895adc7e
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Mon Mar 18 00:22:39 2019 +0100
+
+    apes group 39 removed
+
+commit 95e4f248df6126f040ff2021ab97c4310c543271
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Sun Mar 17 20:57:15 2019 +0100
+
+    abyss dwellers reaping fix
+
+commit 8a45d7f625bfaead8989ecce3c8bff6253e11fbb
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Mon Mar 11 22:35:22 2019 +0100
+
+    risen souls 8.1.5
+
+commit 62e1c5c1d6c553eba7690deaa0845366c354d9d9
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Sun Mar 10 18:56:15 2019 +0100
+
+    reaping fix
+
+commit 96d29e1cf5d4fefae9da5b9e98ff55fca87bf703
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Sun Mar 10 02:50:43 2019 +0100
+
+    reaping icon text to indicate reaping wave
+
+commit b99f45d325e939ac53d6ceb5e8733d9d43bc11fe
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Sun Mar 10 02:35:20 2019 +0100
+
+    replace reaping color with icon
+
+commit 114ed3f2abdcd6b47918798587fd6aeedd310e32
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Sun Mar 10 02:11:12 2019 +0100
+
+    changed bonesaw reaping type to tormented soul
+
+commit fb67ee2c4f9a81f90bcb7bcb40dd08e777237f83
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Sun Mar 10 02:07:50 2019 +0100
+
+    remove reaping icon from npc icons
+    adjust tooltip fontstring
+
+commit 679387f4c164f2bec64aef602e9f0a77e047a32b
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Sun Mar 10 02:07:21 2019 +0100
+
+    reaping text contains icon
+
+commit a68c6d966522d07ceeaa88f17fb6f4f0f0c3b99b
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Sun Mar 10 01:57:09 2019 +0100
+
+    alliance teeming fix
+
+commit 1c0dadae5513a756f2cf75a33615934b60c148fa
+Author: Nnogga <27819512+nnogga@users.noreply.github.com>
+Date:   Tue Feb 26 01:48:25 2019 +0100
+
+    alliance hp values
 
