@@ -31,11 +31,11 @@
 | 图形接口 | DirectX 12 |
 | 物理交互 | 无 |
 | 前后台帧数 | 不勾选 |
-# 使用说明
+# 下载和安装说明
 ![image](https://github.com/Leitowow/addons/blob/master/pic/download.jpg)
 ##### 找到上方按钮点击Download ZIP下载压缩包
 ##### 把你需要的放入游戏目录的/_retail_\Interface\AddOns\内即可
-# WeakAuras字符串使用方法
+# WeakAuras字符串使用说明
 #### 在文件夹中找到WeakAuras字符串文件夹
 ![image](https://github.com/Leitowow/addons/blob/master/pic/wa1.jpg)
 #### 打开你要导入的字符串，然后全选→复制
