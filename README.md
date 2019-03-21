@@ -35,14 +35,19 @@
 ![image](https://github.com/Leitowow/addons/blob/master/pic/download.jpg)
 > 找到上方按钮点击Download ZIP下载压缩包
 > 把你需要的插件放入游戏目录的/_retail_\Interface\AddOns\内即可
+
 # WeakAuras字符串使用说明
 > 在文件夹中找到WeakAuras字符串文件夹
+
 ![image](https://github.com/Leitowow/addons/blob/master/pic/wa1.jpg)
 > 打开你要导入的字符串，然后全选→复制
+
 ![image](https://github.com/Leitowow/addons/blob/master/pic/wa4.jpg)
 > 在游戏内输入/wa，点击新增→导入
+
 ![image](https://github.com/Leitowow/addons/blob/master/pic/wa2.jpg)
 > 把复制的字符粘贴到框里，点击导入群组
+
 ![image](https://github.com/Leitowow/addons/blob/master/pic/wa3.jpg)
 # 插件目录总览
 
