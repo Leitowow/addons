@@ -53,8 +53,11 @@
 
 ##### AdvancedInterfaceOptions - WOW客户端高级设置
 ##### alaChat - 聊天工具栏增强
-##### AdiBags - 背包和银行插件
-##### *AdiBags_Config - 背包和银行插件配置文件*
+##### ArkInventory - 背包和银行插件
+##### *ArkInventoryConfig - 背包和银行插件配置文件*
+##### *ArkInventoryRules - 背包和银行插件配置文件*
+##### *ArkInventoryRules_Example - 背包和银行插件配置文件*
+##### *ArkInventorySearch - 背包和银行插件配置文件*
 ##### AllTheIDs - 法术ID显示
 ##### AngryKeystones - 大秘境钥匙管理
 ##### AutoLootPlus - 拾取加速
