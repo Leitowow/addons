@@ -1,0 +1,24 @@
+------------------------------------------------------------------------
+r821 | arkayenro | 2019-03-21 03:52:19 +0000 (Thu, 21 Mar 2019) | 15 lines
+Changed paths:
+   M /trunk/ArkInventory.lua
+   M /trunk/ArkInventory.toc
+   M /trunk/VersionHistory.txt
+
+*3.08.23 (21-MAR-2019)*
+ * fixed - issue where item scale might not get applied on first display of a slot
+ * fixed - issue where bar frames sometimes dont hide when empty
+ * fixed - issue with the jani trash piles when youve turned them into scrapping machines
+ * fixed - issue with add to/remove from tracking list text
+ * fixed - issue with restack when the reagent bank has not been unlocked
+ * fixed - issue with item lock desaturation not always returning to normal when swapping bags/items, or when you open something and it ends up in the same slot
+ * fixed - potential issue with the transmog status icon indicator code
+ * fixed - issue with bank window shifting between offline to online and not being able to click on the items
+ * fixed - issue with config option for window anchor point
+ * added - restack (right click) option to prioritise filling up either the reagent bank (default) or profession bags
+ * added - support for External Vendor addon (will not use AI Junk Sell when loaded)
+ * fixed - issue with selljunk function not always running when it should
+ * updated - updated to cater for the api changes in 8.1.5 (WorldMapTooltip, ItemButton)
+
+------------------------------------------------------------------------
+
