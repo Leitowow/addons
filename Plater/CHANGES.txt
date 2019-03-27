@@ -1,7 +1,19 @@
-changeset:   241:642419110e7a
-tag:         v8.1.5.241
+changeset:   245:cca00b8bf6c9
+tag:         v8.1.5.245
 user:        Tercioo
-date:        Tue Mar 19 17:45:30 2019 -0300
-summary:     - Added Number System selector for Wester / East Asia.
+date:        Sun Mar 24 15:40:37 2019 -0300
+summary:     - General polish in the options panel and few fixes.
+
+
+changeset:   244:aa5bccb1aab7
+user:        Tercioo
+date:        Fri Mar 22 13:02:32 2019 -0300
+summary:     - Exposing more threat info: unitFrame.namePlateThreatIsTanking and unitFrame.namePlateThreatStatus.
+
+
+changeset:   243:bb52b4d1e7d3
+user:        Tercioo
+date:        Thu Mar 21 15:35:32 2019 -0300
+summary:     - Added Plater.ShowIndicator (unitFrame, texture, width, height, color, L, R, T, B).
 
 

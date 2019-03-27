@@ -237,7 +237,7 @@ function Plater.OpenOptionsPanel()
 	DF:BuildStatusbarAuthorInfo (statusBar)
 	
 	--wago.io support
-	local wagoDesc = DF:CreateLabel (statusBar, "Important: unexpected issues may occur due to several bugs on the client itself introduced on 8.1.5")
+	local wagoDesc = DF:CreateLabel (statusBar, "You can now import profiles, mods, scripts, animations and color tables from |cFFFFAA00http://wago.io|r")
 	wagoDesc.textcolor = "white"
 	wagoDesc.textsize = 11
 	wagoDesc:SetPoint ("left", statusBar.DiscordTextBox, "right", 10, 0)
@@ -246,7 +246,7 @@ function Plater.OpenOptionsPanel()
 	wagoDesc.Anim:SetLooping ("repeat")
 	DF:CreateAnimation (wagoDesc.Anim, "alpha", 1, 1, .3, .7)
 	DF:CreateAnimation (wagoDesc.Anim, "alpha", 2, 1, 1, .3)
-	wagoDesc.Anim:Play()
+	--wagoDesc.Anim:Play()
 	
 	f.AllMenuFrames = {}
 	for _, frame in ipairs (mainFrame.AllFrames) do
@@ -784,53 +784,52 @@ local interface_options = {
 		
 		{
 			type = "toggle",
-			get = function() return GetCVar (CVAR_ENEMY_MINIONS) == CVAR_ENABLED end,
+			get = function() return GetCVarBool ("nameplateShowEnemies") end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar (CVAR_ENEMY_MINIONS, math.abs (tonumber (GetCVar (CVAR_ENEMY_MINIONS))-1))
+					SetCVar ("nameplateShowEnemies", value and "1" or "0")
 				else
 					Plater:Msg ("you are in combat.")
-					self:SetValue (GetCVar (CVAR_ENEMY_MINIONS) == CVAR_ENABLED)
+					self:SetValue (GetCVarBool ("nameplateShowEnemies"))
 				end
 			end,
-			name = "Enemy Units (" .. (GetBindingKey ("NAMEPLATES") or "") .. "): Minions" .. CVarIcon,
-			desc = "Show nameplate for enemy pets, totems and guardians." .. CVarDesc,
+			name = "Show Enemy Nameplates" .. CVarIcon,
+			desc = "Show nameplate for enemy and neutral units." .. CVarDesc,
 			nocombat = true,
 		},
 		
 		{
 			type = "toggle",
-			get = function() return GetCVar (CVAR_ENEMY_MINUS) == CVAR_ENABLED end,
+			get = function() return GetCVarBool ("nameplateShowFriends") end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar (CVAR_ENEMY_MINUS, math.abs (tonumber (GetCVar (CVAR_ENEMY_MINUS))-1))
+					SetCVar ("nameplateShowFriends", value and "1" or "0")
 				else
 					Plater:Msg ("you are in combat.")
-					self:SetValue (GetCVar (CVAR_ENEMY_MINUS) == CVAR_ENABLED)
+					self:SetValue (GetCVarBool ("nameplateShowFriends"))
 				end
 			end,
-			name = "Enemy Units (V): Minor" .. CVarIcon,
-			desc = "Show nameplate for minor enemies." .. CVarDesc,
+			name = "Show Friendly Nameplates" .. CVarIcon,
+			desc = "Show nameplate for friendly players." .. CVarDesc,
 			nocombat = true,
 		},
+		
 		{
 			type = "toggle",
-			get = function() return GetCVar (CVAR_FRIENDLY_GUARDIAN) == CVAR_ENABLED end,
+			get = function() return GetCVarBool ("nameplateShowOnlyNames") end,
 			set = function (self, fixedparam, value) 
 				if (not InCombatLockdown()) then
-					SetCVar (CVAR_FRIENDLY_GUARDIAN, math.abs (tonumber (GetCVar (CVAR_FRIENDLY_GUARDIAN))-1))
-					SetCVar (CVAR_FRIENDLY_PETS, 	GetCVar (CVAR_FRIENDLY_GUARDIAN))
-					SetCVar (CVAR_FRIENDLY_TOTEMS, GetCVar (CVAR_FRIENDLY_GUARDIAN))
-					SetCVar (CVAR_FRIENDLY_MINIONS, GetCVar (CVAR_FRIENDLY_GUARDIAN))
+					SetCVar ("nameplateShowOnlyNames", value and "1" or "0")
 				else
 					Plater:Msg ("you are in combat.")
-					self:SetValue (GetCVar (CVAR_FRIENDLY_GUARDIAN) == CVAR_ENABLED)
+					self:SetValue (GetCVarBool ("nameplateShowOnlyNames"))
 				end
 			end,
-			name = "Friendly Units (" .. (GetBindingKey ("FRIENDNAMEPLATES") or "") .. "): Minions" .. CVarIcon,
-			desc = "Show nameplate for friendly pets, totems and guardians.\n\nAlso check the Enabled box below Friendly Npc Config." .. CVarDesc,
+			name = "Hide Friendly Health Bar in Dungeons" .. CVarIcon,
+			desc = "While in dungeons or raids, if friendly nameplates are enabled it'll show only the player name." .. CVarDesc,
 			nocombat = true,
 		},
+
 }
 
 local interface_title = Plater:CreateLabel (frontPageFrame, "Interface Options (from the client):", Plater:GetTemplate ("font", "ORANGE_FONT_TEMPLATE"))
@@ -2973,6 +2972,16 @@ Plater.CreateAuraTesting()
 						line.AddSpecial.AuraType = spellData.type
 						line.AddSpecial.EncounterID = spellData.encounterID
 						
+						if (spellData.type) then
+							line.AddTrackList:Enable()
+							line.AddIgnoreList:Enable()
+							line.AddSpecial:Enable()
+						else
+							line.AddTrackList:Disable()
+							line.AddIgnoreList:Disable()
+							line.AddSpecial:Disable()
+						end
+						
 						line.CreateAura.SpellID = spellID
 						line.CreateAura.AuraType = spellData.type
 						line.CreateAura.IsCast = spellData.event == "SPELL_CAST_START"
@@ -2983,7 +2992,9 @@ Plater.CreateAuraTesting()
 						
 						--manual tracking doesn't have a black list
 						if (Plater.db.profile.aura_tracker.track_method == 0x1) then
-							line.AddIgnoreList:Enable()
+							if (spellData.type) then
+								line.AddIgnoreList:Enable()
+							end
 							
 						elseif (Plater.db.profile.aura_tracker.track_method == 0x2) then
 							line.AddIgnoreList:Disable()
@@ -5813,6 +5824,22 @@ local relevance_options = {
 			name = "Enemy Spec",
 			desc = "Enemy player spec icon.\n\n|cFFFFFF00Important|r: must have Details! Damage Meter installed.",
 		},
+		{
+			type = "range",
+			get = function() return Plater.db.profile.indicator_scale end,
+			set = function (self, fixedparam, value) 
+				Plater.db.profile.indicator_scale = value
+				Plater.UpdateAllPlates()
+			end,
+			min = 0.2,
+			max = 3,
+			step = 0.01,
+			usedecimals = true,
+			name = "Scale",
+			desc = "Scale",
+		},
+		
+		
 		--
 
 		--indicator icon anchor

@@ -2409,6 +2409,8 @@ L["STRING_MINITUTORIAL_OPTIONS_PANEL6"] = "Selezionare qui che finestra che si d
 --[[Translation missing --]]
 --[[ L["STRING_SEGMENTS_LIST_TRASH"] = ""--]] 
 --[[Translation missing --]]
+--[[ L["STRING_SEGMENTS_LIST_WASTED_TIME"] = ""--]] 
+--[[Translation missing --]]
 --[[ L["STRING_SHIELD_HEAL"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["STRING_SHIELD_OVERHEAL"] = ""--]] 

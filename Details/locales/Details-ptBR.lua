@@ -1502,6 +1502,8 @@ L["STRING_SEGMENTS_LIST_OVERALL"] = "tudo"
 L["STRING_SEGMENTS_LIST_TIMEINCOMBAT"] = "Tempo em Combate"
 L["STRING_SEGMENTS_LIST_TOTALTIME"] = "Tempo Total"
 L["STRING_SEGMENTS_LIST_TRASH"] = "trash"
+--[[Translation missing --]]
+--[[ L["STRING_SEGMENTS_LIST_WASTED_TIME"] = ""--]] 
 L["STRING_SHIELD_HEAL"] = "Prevenido"
 L["STRING_SHIELD_OVERHEAL"] = "Desperdiçado"
 L["STRING_SHORTCUT_RIGHTCLICK"] = "Menu de Atalho (botão direito para fechar)"

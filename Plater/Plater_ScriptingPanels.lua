@@ -74,7 +74,6 @@ Plater.APIList = {
 	{Name = "GetNpcColor", 			Signature = "Plater.GetNpcColor (unitFrame)", 						Desc = "Return a table with the color selected in the Npc Colors tab.\n\nThe color set there must have the 'Only Scripts' checked."},
 	{Name = "SetExecuteRange", 		Signature = "Plater.SetExecuteRange (isExecuteEnabled, healthAmount)", 	Desc = "Set if Plater should check for execute range and in what percent of health the execute range starts\n\nhealthAmount is in a range of zero to one, example: 25% is 0.25"},
 	
-	
 	{Name = "IsUnitInFriendsList", 		Signature = "Plater.IsUnitInFriendsList (unitFrame)", 					Desc = "Return 'true' if the unit is in the player's friends list."},
 	{Name = "IsUnitTank", 				Signature = "Plater.IsUnitTank (unitFrame)", 						Desc = "Return 'true' if the unit is in tank role."},
 	{Name = "IsUnitTapped", 			Signature = "Plater.IsUnitTapped (unitFrame)", 						Desc = "Return 'true' if the unit is tapped and the player does not receives credits to kill it. Usually units tapped are shown with a gray color."},
@@ -82,6 +81,7 @@ Plater.APIList = {
 	{Name = "IsInOpenWorld", 			Signature = "Plater.IsInOpenWorld()", 							Desc = "Return 'true' if the player is in open world (not inside raids, dungeons, etc)."},
 	{Name = "IsPlayerTank", 			Signature = "Plater.IsPlayerTank()", 							Desc = "Return 'true' if the player is in the tank role."},
 	{Name = "GetTanks", 				Signature = "Plater.GetTanks()", 								Desc = "Return a table with all tanks in the group, use Plater.GetTanks()[unitName] to know if the unit is a tank."},
+	{Name = "ShowIndicator", 			Signature = "Plater.ShowIndicator (unitFrame, texture, width, height, color, L, R, T, B)",	Desc = "Adds an indicator within the default indicators row.\n\nL, R, T, B: texcoordinates (optional)."},
 	
 	{Name = "DisableHighlight", 			Signature = "Plater.DisableHighlight (unitFrame)", 					Desc = "The nameplate won't highlight when the mouse passes over it."},
 	{Name = "EnableHighlight", 			Signature = "Plater.EnableHighlight (unitFrame)", 					Desc = "Enable the mouse over highlight."},
@@ -90,6 +90,9 @@ Plater.APIList = {
 	{Name = "RefreshNameplateColor", 		Signature = "Plater.RefreshNameplateColor (unitFrame)", 				Desc = "Check which color the nameplate should have and set it."},
 	{Name = "RefreshNameplateStrata", 	Signature = "Plater.RefreshNameplateStrata (unitFrame)", 				Desc = "Reset the frame strata and frame levels to default."},
 	{Name = "UpdateNameplateThread", 	Signature = "Plater.UpdateNameplateThread (unitFrame)", 				Desc = "Perform an Aggro update on the nameplate changing color to the current thread situation."},	
+	
+	{Name = "SafeSetCVar", 			Signature = "Plater.SafeSetCVar (variableName, value)", 				Desc = "Change the value of a CVar, if called during combat, it'll be applied when the player leaves combat.\n\nOriginal value is stored until Plater.RestoreCVar (variableName) is called."},	
+	{Name = "RestoreCVar", 			Signature = "Plater.RestoreCVar (variableName)", 					Desc = "Restore the value a CVar had before Plater.SafeSetCVar() was called."},
 }
 
 Plater.FrameworkList = {
@@ -154,6 +157,8 @@ Plater.NameplateComponents = {
 		"namePlateUnitNameLower",
 		"namePlateIsTarget",
 		"namePlateThreatPercent",
+		"namePlateThreatStatus",
+		"namePlateThreatIsTanking",
 		"PlayerCannotAttack",
 		"InExecuteRange",
 		"InCombat",
@@ -809,7 +814,7 @@ Plater.TriggerDefaultMembers = {
 			return t
 		end
 		
-		local add_API_label = DF:CreateLabel (parent, "API Palette:", DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE"))
+		local add_API_label = DF:CreateLabel (parent, "API:", DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE"))
 		local add_API_dropdown = DF:CreateDropDown (parent, build_API_dropdown_options, 1, 130, 20, "AddAPIDropdown", _, DF:GetTemplate ("dropdown", "OPTIONS_DROPDOWN_TEMPLATE"))
 		mainFrame.AddAPIDropdown = add_API_dropdown
 		add_API_dropdown:SetFrameStrata (code_editor:GetFrameStrata())
@@ -871,7 +876,7 @@ Plater.TriggerDefaultMembers = {
 			return t
 		end
 		
-		local add_FW_label = DF:CreateLabel (parent, "Framework Palette:", DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE"))
+		local add_FW_label = DF:CreateLabel (parent, "Framework:", DF:GetTemplate ("font", "ORANGE_FONT_TEMPLATE"))
 		local add_FW_dropdown = DF:CreateDropDown (parent, build_FW_dropdown_options, 1, 130, 20, "AddFWDropdown", _, DF:GetTemplate ("dropdown", "OPTIONS_DROPDOWN_TEMPLATE"))
 		mainFrame.AddFWDropdown = add_FW_dropdown
 		add_FW_dropdown:SetFrameStrata (code_editor:GetFrameStrata())
@@ -1421,7 +1426,7 @@ function Plater.CreateHookingPanel()
 		
 		f:SetScript ("OnShow", function()
 			LinkBox:SetText ("https://wow.curseforge.com/projects/plater-nameplates/pages/scripts")
-			C_Timer.After (1, function()
+			C_Timer.After (.1, function()
 				LinkBox:SetFocus (true)
 				LinkBox:HighlightText()
 			end)
@@ -1817,6 +1822,38 @@ function Plater.CreateHookingPanel()
 		local componentsButton = DF:CreateButton (hookFrame.CodeEditorLuaEntry, function() end, 100, 20, "Components", -1, nil, nil, nil, nil, nil, DF:GetTemplate ("button", "OPTIONS_BUTTON_TEMPLATE"), DF:GetTemplate ("font", "PLATER_BUTTON"))
 		componentsButton:SetIcon ([[Interface\FriendsFrame\UI-FriendsList-Large-Up]], 16, 16, "overlay", {.2, .74, .27, .75}, nil, 4)
 		hookFrame.ComponentsButton = componentsButton
+
+		local getMoreModsFunc = function()
+			if (PlaterMoreModsPanel) then
+				PlaterMoreModsPanel:Show()
+				return
+			end
+			
+			local f = DF:CreateSimplePanel (UIParent, 460, 90, "Plater Get More Mods", "PlaterMoreModsPanel")
+			f:SetFrameStrata ("TOOLTIP")
+			f:SetPoint ("center", UIParent, "center")
+			
+			DF:CreateBorder (f)
+			
+			local LinkBox = DF:CreateTextEntry (f, function()end, 380, 20, "ExportLinkBox", _, _, DF:GetTemplate ("dropdown", "OPTIONS_DROPDOWN_TEMPLATE"))
+			LinkBox:SetPoint ("center", f, "center", 0, -10)
+			
+			f:SetScript ("OnShow", function()
+				LinkBox:SetText ("https://wago.io/plater/plater-mods")
+				C_Timer.After (.1, function()
+					LinkBox:SetFocus (true)
+					LinkBox:HighlightText()
+				end)
+			end)
+			
+			f:Hide()
+			f:Show()
+		end
+		
+		local moreModsButton = DF:CreateButton (hookFrame.CodeEditorLuaEntry, getMoreModsFunc, 120, 20, "Get More Mods", -1, nil, nil, nil, nil, nil, DF:GetTemplate ("button", "OPTIONS_BUTTON_TEMPLATE"), DF:GetTemplate ("font", "PLATER_BUTTON"))
+		moreModsButton:SetIcon ([[Interface\FriendsFrame\UI-FriendsList-Large-Up]], 16, 16, "overlay", {.2, .74, .27, .75}, nil, 4)
+		hookFrame.MoreModsButton = moreModsButton
+		hookFrame.MoreModsButton:SetPoint ("left", componentsButton, "right", 2, 0)
 		
 		local onSelectComponentMember = function (a, d, member)
 			hookFrame.CodeEditorLuaEntry.editbox:Insert (member)
@@ -2413,7 +2450,7 @@ function Plater.CreateScriptingPanel()
 		
 		f:SetScript ("OnShow", function()
 			LinkBox:SetText ("https://wow.curseforge.com/projects/plater-nameplates/pages/scripts")
-			C_Timer.After (1, function()
+			C_Timer.After (.1, function()
 				LinkBox:SetFocus (true)
 				LinkBox:HighlightText()
 			end)

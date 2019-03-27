@@ -2184,6 +2184,8 @@ L["STRING_PLUGINOPTIONS_TEXTSTYLE"] = "Style du texte"
 --[[Translation missing --]]
 --[[ L["STRING_SEGMENTS_LIST_TRASH"] = ""--]] 
 --[[Translation missing --]]
+--[[ L["STRING_SEGMENTS_LIST_WASTED_TIME"] = ""--]] 
+--[[Translation missing --]]
 --[[ L["STRING_SHIELD_HEAL"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["STRING_SHIELD_OVERHEAL"] = ""--]] 

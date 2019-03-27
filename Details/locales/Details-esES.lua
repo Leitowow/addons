@@ -1825,6 +1825,8 @@ L["STRING_SEGMENT_START"] = "Iniciar"
 --[[Translation missing --]]
 --[[ L["STRING_SEGMENTS_LIST_TRASH"] = ""--]] 
 --[[Translation missing --]]
+--[[ L["STRING_SEGMENTS_LIST_WASTED_TIME"] = ""--]] 
+--[[Translation missing --]]
 --[[ L["STRING_SHIELD_HEAL"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["STRING_SHIELD_OVERHEAL"] = ""--]] 

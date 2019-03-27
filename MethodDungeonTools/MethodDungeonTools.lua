@@ -82,6 +82,7 @@ local defaultSavedVars = {
 		currentDifficulty = 10,
 		xoffset = 0,
 		yoffset = -150,
+        defaultColor = "228b22",
 		anchorFrom = "TOP",
 		anchorTo = "TOP",
         tooltipInCorner = false,
@@ -1562,7 +1563,7 @@ function MethodDungeonTools:EnsureDBTables()
                 end
             end
         end
-        pull["color"] = pull["color"] or "228b22"
+        pull["color"] = pull["color"] or db.defaultColor
     end
 
     MethodDungeonTools:GetCurrentPreset().week = MethodDungeonTools:GetCurrentPreset().week or MethodDungeonTools:GetCurrentAffixWeek()
@@ -2745,6 +2746,7 @@ function MethodDungeonTools:GetCurrentAffixWeek()
 end
 
 function MethodDungeonTools:ResetMainFramePos()
+    if not framesInitialized then initFrames() end
     local f = MethodDungeonTools.main_frame
     db.xoffset = 0
     db.yoffset = -150
@@ -2887,6 +2889,15 @@ function initFrames()
 	main_frame:SetSize(sizex, sizey)
 	MethodDungeonTools.main_frame = main_frame
 
+    -- reset frame position after 8.1.5 scaling changes
+    if not db.version or db.version<250 then
+        db.xoffset = 0
+        db.yoffset = -150
+        db.anchorFrom = "TOP"
+        db.anchorTo = "TOP"
+    end
+    local version = GetAddOnMetadata(AddonName, "Version"):gsub("%.","")
+    db.version = tonumber(version)
 	-- Set frame position
 	main_frame:ClearAllPoints();
 	main_frame:SetPoint(db.anchorTo, UIParent,db.anchorFrom, db.xoffset, db.yoffset)

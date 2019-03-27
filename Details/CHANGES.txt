@@ -1,5 +1,59 @@
-changeset:   780:e28b2b09c3f5
+changeset:   789:6d7dded15ee2
 tag:         tip
+user:        Tercioo
+date:        Sat Mar 23 20:20:12 2019 -0300
+summary:     - Added te first batch of API 2.0 (file functions/api2.lua)
+
+
+changeset:   788:9be6a239ff88
+user:        Tercioo
+date:        Sat Mar 23 19:35:49 2019 -0300
+summary:     - Added te first batch of API 2.0 (file functions/api2.lua)
+
+
+changeset:   787:e6f0c5d51ff1
+user:        Tercioo
+date:        Mon Mar 18 15:10:59 2019 -0300
+summary:     - Attempt to delete the last trash segment in a dungeon run if this trash is the current segment. I'll delete it and pass the last boss segment as the current segment, after that it'll create the overall segment for the dungeon run.
+
+
+changeset:   786:b93e3947693e
+user:        Tercioo
+date:        Fri Mar 15 20:03:38 2019 -0300
+summary:     - Tagging deprecated functions as 'deprecated' and small cleanups.
+
+
+changeset:   785:e825e1adf6db
+user:        Tercioo
+date:        Thu Mar 14 20:30:51 2019 -0300
+summary:     - Make sure the actor isn't a fight component before the garbage collector erases it.
+
+
+changeset:   784:d99be9f366f7
+user:        Tercioo
+date:        Tue Mar 12 16:03:41 2019 -0300
+summary:     - Fixed debug message without debug enabled.
+
+
+changeset:   783:c4550503d2db
+user:        Tercioo
+date:        Mon Mar 11 21:41:55 2019 -0300
+summary:     - Garbage collector won't clear actors in mythic dungeon segments.
+
+
+changeset:   782:b5da05086a0b
+user:        Tercioo
+date:        Sun Mar 10 23:44:35 2019 -0300
+summary:     - Segments list improvements.
+
+
+changeset:   781:a587acc5c57c
+user:        Tercioo
+date:        Sun Mar 10 21:36:25 2019 -0300
+summary:     - Changed the way mythic dungeons are handled internally.
+
+
+changeset:   780:e28b2b09c3f5
 user:        Tercioo
 date:        Fri Mar 08 18:57:38 2019 -0300
 summary:     - Fixing the Streamer plugin for the recently changes in details!.
@@ -549,59 +603,5 @@ changeset:   689:deb826e20b4f
 user:        Tercio
 date:        Wed Dec 06 20:37:04 2017 -0200
 summary:     - attempt to fix the argus encounter double segments.
-
-
-changeset:   688:17b265227703
-user:        Tercio
-date:        Wed Nov 29 11:32:17 2017 -0200
-summary:     - Hotfix the issue of getting errors when login in the game.
-
-
-changeset:   687:89042076572f
-user:        Tercio
-date:        Mon Nov 27 11:54:48 2017 -0200
-summary:     - adding stuff for the new raid.
-
-
-changeset:   686:83216118b57d
-user:        Tercio
-date:        Sun Nov 26 16:31:05 2017 -0200
-summary:     - added new panel to consolidate plugins and panels from the main addon into only one frame.
-
-
-changeset:   685:39dd82ba0a0e
-user:        Tercio
-date:        Tue Nov 21 10:00:22 2017 -0200
-summary:     - removed some already fixed debug lines.
-
-
-changeset:   684:8a7fba7e847c
-user:        Tercio
-date:        Sat Oct 21 13:30:06 2017 -0200
-summary:     - Fixed an error when clicking on the spec icon.
-
-
-changeset:   683:e708d8a64e08
-user:        Tercio
-date:        Sat Oct 21 12:40:54 2017 -0200
-summary:     - Fix for ticket #262: unable to open the player detail window when streamer option 'no alerts' are enabled.
-
-
-changeset:   682:6ade12d881ad
-user:        Tercio
-date:        Mon Oct 16 21:21:44 2017 -0200
-summary:     - Fixed green icons on the new feature 'event tracker'.
-
-
-changeset:   681:217e1d219223
-user:        Tercio
-date:        Mon Oct 16 14:38:40 2017 -0200
-summary:     - Click to open menus now close the menu if already opened.
-
-
-changeset:   680:7ffc9da9aaee
-user:        Tercio
-date:        Sat Oct 14 16:01:59 2017 -0300
-summary:     - framework update to v58 (looks like some author are adding words like 'topleft' and 'top' to the global namespace).
 
 

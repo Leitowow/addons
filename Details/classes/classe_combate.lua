@@ -337,6 +337,10 @@
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --> internals
 
+	function combate:CreateNewCombatTable()
+		return combate:NovaTabela()
+	end
+
 	--class constructor
 	function combate:NovaTabela (iniciada, _tabela_overall, combatId, ...)
 
@@ -394,6 +398,11 @@
 		--> time data container
 		esta_tabela.TimeData = _detalhes:TimeDataCreateCombatTables()
 		esta_tabela.PhaseData = {{1, 1}, damage = {}, heal = {}, damage_section = {}, heal_section = {}} --[1] phase number [2] phase started
+		
+		--> for external plugin usage, these tables are guaranteed to be saved with the combat
+		esta_tabela.spells_cast_timeline = {}
+		esta_tabela.aura_timeline = {}
+		esta_tabela.cleu_timeline = {}
 		
 		--> Skill cache (not used)
 		esta_tabela.CombatSkillCache = {}
@@ -645,9 +654,9 @@
 					shadow = _detalhes.atributo_misc:r_connect_shadow (actor, true, custom_combat)
 				end
 				
-				shadow.boss_fight_component = actor.boss_fight_component
-				shadow.fight_component = actor.fight_component
-				shadow.grupo = actor.grupo
+				shadow.boss_fight_component = actor.boss_fight_component or shadow.boss_fight_component
+				shadow.fight_component = actor.fight_component or shadow.fight_component
+				shadow.grupo = actor.grupo or shadow.grupo
 			end
 		end
 		

@@ -417,7 +417,7 @@
 			
 			--> combat creation is completed, remove the flag
 			_detalhes.tabela_vigente.IsBeingCreated = nil
-			
+	
 			_detalhes:SendEvent ("COMBAT_PLAYER_ENTER", nil, _detalhes.tabela_vigente, _detalhes.encounter_table and _detalhes.encounter_table.id)
 			if (_detalhes.tabela_vigente.is_boss) then
 				--> the encounter was found through encounter_start event
@@ -478,13 +478,14 @@
 			_detalhes.leaving_combat = true
 			_detalhes.last_combat_time = _tempo
 			
-			if (_detalhes.schedule_remove_overall and not from_encounter_end and not InCombatLockdown()) then
-				if (_detalhes.debug) then
-					_detalhes:Msg ("(debug) found schedule overall data deletion.")
-				end
-				_detalhes.schedule_remove_overall = false
-				_detalhes.tabela_historico:resetar_overall()
-			end
+			--deprecated (combat are now added immediatelly since there's no script run too long)
+			--if (_detalhes.schedule_remove_overall and not from_encounter_end and not InCombatLockdown()) then
+			--	if (_detalhes.debug) then
+			--		_detalhes:Msg ("(debug) found schedule overall data deletion.")
+			--	end
+			--	_detalhes.schedule_remove_overall = false
+			--	_detalhes.tabela_historico:resetar_overall()
+			--end
 			
 			_detalhes:CatchRaidBuffUptime ("BUFF_UPTIME_OUT")
 			_detalhes:CatchRaidDebuffUptime ("DEBUFF_UPTIME_OUT")
@@ -574,20 +575,16 @@
 			end		
 			
 			--> tag as a mythic dungeon segment, can be any type of segment, this tag also avoid the segment to be tagged as trash
-			if (_detalhes.MythicPlus.Started) then
+			local mythicLevel = C_ChallengeMode.GetActiveKeystoneInfo()
+			if (mythicLevel and mythicLevel >= 2) then
 				_detalhes.tabela_vigente.is_mythic_dungeon_segment = true
 				_detalhes.tabela_vigente.is_mythic_dungeon_run_id = _detalhes.mythic_dungeon_id
-			else
-				local mythicLevel = C_ChallengeMode.GetActiveKeystoneInfo()
-				if (mythicLevel and mythicLevel >= 2) then
-					_detalhes.tabela_vigente.is_mythic_dungeon_segment = true
-					_detalhes.tabela_vigente.is_mythic_dungeon_run_id = _detalhes.mythic_dungeon_id
-				end
 			end
 			
 			--> send item level after a combat if is in raid or party group
 			C_Timer.After (1, _detalhes.ScheduleSyncPlayerActorData)
 			
+			--if this segment isn't a boss fight
 			if (not _detalhes.tabela_vigente.is_boss) then
 
 				if (_detalhes.tabela_vigente.is_pvp or _detalhes.tabela_vigente.is_arena) then
@@ -601,10 +598,8 @@
 				local in_instance = IsInInstance() --> garrison returns party as instance type.
 				if ((InstanceType == "party" or InstanceType == "raid") and in_instance) then
 					if (InstanceType == "party") then
-						if (not _detalhes.tabela_vigente.is_mythic_dungeon_segment) then
-							--> tag the combat as trash clean up
-							_detalhes.tabela_vigente.is_trash = true
-						else
+						if (_detalhes.tabela_vigente.is_mythic_dungeon_segment) then --setted just above
+							--is inside a mythic+ dungeon and this is not a boss segment, so tag it as a dungeon mythic+ trash segment
 							local zoneName, instanceType, difficultyID, difficultyName, maxPlayers, dynamicDifficulty, isDynamic, instanceMapID, instanceGroupSize = GetInstanceInfo()
 							_detalhes.tabela_vigente.is_mythic_dungeon_trash = {
 								ZoneName = zoneName,
@@ -612,6 +607,9 @@
 								Level = _detalhes.MythicPlus.Level,
 								EJID = _detalhes.MythicPlus.ejID,
 							}
+						else
+							--> tag the combat as trash clean up
+							_detalhes.tabela_vigente.is_trash = true
 						end
 					else
 						_detalhes.tabela_vigente.is_trash = true
@@ -643,12 +641,16 @@
 				_detalhes:FlagActorsOnCommonFight() --fight_component
 				--_detalhes:CheckMemoryAfterCombat() -- 7.2.5 is doing some weird errors even out of combat
 			else
-			
+				
+				--this segment is a boss fight
 				if (not InCombatLockdown() and not UnitAffectingCombat ("player")) then
-					_detalhes:FlagActorsOnBossFight()
+					
 				else
-					_detalhes.schedule_flag_boss_components = true
+					--_detalhes.schedule_flag_boss_components = true
 				end
+				
+				--calling here without checking for combat since the does not ran too long for scripts
+				_detalhes:FlagActorsOnBossFight()
 				
 				local boss_id = _detalhes.encounter_table.id
 
@@ -657,9 +659,7 @@
 					
 					--> add to storage
 					if (not InCombatLockdown() and not UnitAffectingCombat ("player") and not _detalhes.logoff_saving_data) then
-					
 						--_detalhes.StoreEncounter()
-					
 						local successful, errortext = pcall (_detalhes.StoreEncounter)
 						if (not successful) then
 							_detalhes:Msg ("error occurred on StoreEncounter():", errortext)
@@ -707,13 +707,11 @@
 					local bossFunction, bossFunctionType = _detalhes:GetBossFunction (_detalhes.tabela_vigente.is_boss.mapid or 0, _detalhes.tabela_vigente.is_boss.index or 0)
 					if (bossFunction) then
 						if (_bit_band (bossFunctionType, 0x2) ~= 0) then --end of combat
-							if (not InCombatLockdown() and not UnitAffectingCombat ("player") and not _detalhes.logoff_saving_data) then
+							if (not _detalhes.logoff_saving_data) then
 								local successful, errortext = pcall (bossFunction, _detalhes.tabela_vigente)
 								if (not successful) then
 									_detalhes:Msg ("error occurred on Encounter Boss Function:", errortext)
 								end
-							else
-								_detalhes.schedule_boss_function_run = bossFunction
 							end
 						end
 					end
@@ -871,10 +869,7 @@
 			end
 			
 			_detalhes:CheckForTextTimeCounter()
-			
-			
 			_detalhes.StoreSpells()
-			
 			_detalhes:RunScheduledEventsAfterCombat()
 		end
 
@@ -1359,9 +1354,16 @@
 			local energy_container = _detalhes.tabela_vigente [3]
 			local misc_container = _detalhes.tabela_vigente [4]
 			
+			local mythicDungeonRun = _detalhes.tabela_vigente.is_mythic_dungeon_segment
+			
 			for class_type, container in _ipairs ({damage_container, healing_container}) do 
 			
 				for _, actor in _ipairs (container._ActorTable) do 
+				
+					if (mythicDungeonRun) then
+						actor.fight_component = true
+					end
+					
 					if (actor.grupo) then
 						if (class_type == 1 or class_type == 2) then
 							for target_name, amount in _pairs (actor.targets) do 

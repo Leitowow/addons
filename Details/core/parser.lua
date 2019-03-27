@@ -4196,7 +4196,7 @@ local SPELL_POWER_PAIN = SPELL_POWER_PAIN or (PowerEnum and PowerEnum.Pain) or 1
 		--store the encounter time inside the encounter table for the encounter plugin
 		_detalhes.encounter_table ["start"] = _GetTime()
 		_detalhes.encounter_table ["end"] = nil
-		
+--		local encounterID = Details.encounter_table.id
 		_detalhes.encounter_table.id = encounterID
 		_detalhes.encounter_table.name = encounterName
 		_detalhes.encounter_table.diff = difficultyID
@@ -4232,6 +4232,7 @@ local SPELL_POWER_PAIN = SPELL_POWER_PAIN or (PowerEnum and PowerEnum.Pain) or 1
 			_detalhes.encounter_table.index = boss_index
 		end
 		
+		_detalhes:SendEvent ("COMBAT_ENCOUNTER_START", nil, ...)
 	end
 	
 	function _detalhes.parser_functions:ENCOUNTER_END (...)
@@ -4248,7 +4249,7 @@ local SPELL_POWER_PAIN = SPELL_POWER_PAIN or (PowerEnum and PowerEnum.Pain) or 1
 			if (_detalhes.debug) then
 				_detalhes:Msg ("(debug) the zone type is 'party', ignoring ENCOUNTER_END.")
 			end
-			return
+			--return --rnu encounter end for dungeons as well
 		end
 	
 		local encounterID, encounterName, difficultyID, raidSize, endStatus = _select (1, ...)
@@ -4285,6 +4286,8 @@ local SPELL_POWER_PAIN = SPELL_POWER_PAIN or (PowerEnum and PowerEnum.Pain) or 1
 			end
 		end
 
+		_detalhes:SendEvent ("COMBAT_ENCOUNTER_END", nil, ...)
+		
 		_table_wipe (_detalhes.encounter_table)
 		
 		return true
@@ -4371,60 +4374,13 @@ local SPELL_POWER_PAIN = SPELL_POWER_PAIN or (PowerEnum and PowerEnum.Pain) or 1
 			_detalhes:Msg ("(debug) running scheduled events after combat end.")
 		end
 	
-		--> add segments to overall data if any scheduled
-		if (_detalhes.schedule_add_to_overall and #_detalhes.schedule_add_to_overall > 0) then
-			if (_detalhes.debug) then
-				_detalhes:Msg ("(debug) adding ", #_detalhes.schedule_add_to_overall, "combats in queue to overall data.")
-			end
-			
-			for i = #_detalhes.schedule_add_to_overall, 1, -1 do
-				local CombatToAdd = tremove (_detalhes.schedule_add_to_overall, i)
-				if (CombatToAdd) then
-					_detalhes.historico:adicionar_overall (CombatToAdd)
-				end
-			end
-		end
-		
-		if (_detalhes.schedule_mythicdungeon_trash_merge) then
-			_detalhes.schedule_mythicdungeon_trash_merge = nil
-			DetailsMythicPlusFrame.MergeTrashCleanup (true)
-		end
-		
-		if (_detalhes.schedule_mythicdungeon_endtrash_merge) then
-			_detalhes.schedule_mythicdungeon_endtrash_merge = nil
-			DetailsMythicPlusFrame.MergeRemainingTrashAfterAllBossesDone()
-		end
-		
-		if (_detalhes.schedule_mythicdungeon_overallrun_merge) then
-			_detalhes.schedule_mythicdungeon_overallrun_merge = nil
-			DetailsMythicPlusFrame.MergeSegmentsOnEnd()
-		end
-		
-		--> aqui, tentativa de fazer o timer da janela do Solo funcionar corretamente:
-		if (_detalhes.solo and _detalhes.PluginCount.SOLO > 0) then
-			if (_detalhes.SoloTables.Plugins [_detalhes.SoloTables.Mode].Stop) then
-				_detalhes.SoloTables.Plugins [_detalhes.SoloTables.Mode].Stop()
-			end
-		end
-		
+		--when the user requested data from the storage but is in combat lockdown
 		if (_detalhes.schedule_storage_load) then
 			_detalhes.schedule_storage_load = nil
 			_detalhes.ScheduleLoadStorage()
 		end
 		
-		if (_detalhes.schedule_flag_boss_components) then
-			_detalhes.schedule_flag_boss_components = false
-			_detalhes:FlagActorsOnBossFight()
-		end
-		
-		if (_detalhes.schedule_remove_overall) then
-			if (_detalhes.debug) then
-				_detalhes:Msg ("(debug) found schedule overall data clean up.")
-			end
-			_detalhes.schedule_remove_overall = false
-			_detalhes.tabela_historico:resetar_overall()
-		end
-		
+		--store a boss encounter when out of combat since it might need to load the storage
 		if (_detalhes.schedule_store_boss_encounter) then
 			if (not _detalhes.logoff_saving_data) then
 				--_detalhes.StoreEncounter()
@@ -4436,16 +4392,7 @@ local SPELL_POWER_PAIN = SPELL_POWER_PAIN or (PowerEnum and PowerEnum.Pain) or 1
 			_detalhes.schedule_store_boss_encounter = nil
 		end
 		
-		if (_detalhes.schedule_boss_function_run) then
-			if (not _detalhes.logoff_saving_data) then
-				local successful, errortext = pcall (_detalhes.schedule_boss_function_run, _detalhes.tabela_vigente)
-				if (not successful) then
-					_detalhes:Msg ("error occurred on Encounter Boss Function:", errortext)
-				end
-			end
-			_detalhes.schedule_boss_function_run = nil
-		end
-		
+		--when a large amount of data has been removed and the player is in combat, schedule to run the hard garbage collector (the blizzard one, not the details! internal)
 		if (_detalhes.schedule_hard_garbage_collect) then
 			if (_detalhes.debug) then
 				_detalhes:Msg ("(debug) found schedule collectgarbage().")
@@ -4460,30 +4407,98 @@ local SPELL_POWER_PAIN = SPELL_POWER_PAIN or (PowerEnum and PowerEnum.Pain) or 1
 			end
 		end
 		
-		if (_detalhes.wipe_called and false) then --disabled
-			_detalhes.wipe_called = nil
-			_detalhes:CaptureSet (nil, "damage", true)
-			_detalhes:CaptureSet (nil, "energy", true)
-			_detalhes:CaptureSet (nil, "aura", true)
-			_detalhes:CaptureSet (nil, "energy", true)
-			_detalhes:CaptureSet (nil, "spellcast", true)
-			
-			_detalhes:CaptureSet (false, "damage", false, 10)
-			_detalhes:CaptureSet (false, "energy", false, 10)
-			_detalhes:CaptureSet (false, "aura", false, 10)
-			_detalhes:CaptureSet (false, "energy", false, 10)
-			_detalhes:CaptureSet (false, "spellcast", false, 10)
-		end
-
 		if (not OnRegenEnabled) then
 			_table_wipe (bitfield_swap_cache)
 			_table_wipe (ignore_actors)
-			
 			_detalhes:DispatchAutoRunCode ("on_leavecombat")
 		end
+		
+		if (_detalhes.solo and _detalhes.PluginCount.SOLO > 0) then --code too old and I don't have documentation for it
+			if (_detalhes.SoloTables.Plugins [_detalhes.SoloTables.Mode].Stop) then
+				_detalhes.SoloTables.Plugins [_detalhes.SoloTables.Mode].Stop()
+			end
+		end
+	
+		--deprecated shcedules
+		do
+			if (_detalhes.schedule_add_to_overall and #_detalhes.schedule_add_to_overall > 0) then --deprecated (combat are now added immediatelly since there's no script run too long)
+				if (_detalhes.debug) then
+					_detalhes:Msg ("(debug) adding ", #_detalhes.schedule_add_to_overall, "combats in queue to overall data.")
+				end
+				
+				for i = #_detalhes.schedule_add_to_overall, 1, -1 do
+					local CombatToAdd = tremove (_detalhes.schedule_add_to_overall, i)
+					if (CombatToAdd) then
+						_detalhes.historico:adicionar_overall (CombatToAdd)
+					end
+				end
+			end
+			
+			if (_detalhes.schedule_mythicdungeon_trash_merge) then --deprecated (combat are now added immediatelly since there's no script run too long)
+				_detalhes.schedule_mythicdungeon_trash_merge = nil
+				DetailsMythicPlusFrame.MergeTrashCleanup (true)
+			end
+			
+			if (_detalhes.schedule_mythicdungeon_endtrash_merge) then --deprecated (combat are now added immediatelly since there's no script run too long)
+				_detalhes.schedule_mythicdungeon_endtrash_merge = nil
+				DetailsMythicPlusFrame.MergeRemainingTrashAfterAllBossesDone()
+			end
+			
+			if (_detalhes.schedule_mythicdungeon_overallrun_merge) then --deprecated (combat are now added immediatelly since there's no script run too long)
+				_detalhes.schedule_mythicdungeon_overallrun_merge = nil
+				DetailsMythicPlusFrame.MergeSegmentsOnEnd()
+			end
+		
+			if (_detalhes.schedule_flag_boss_components) then --deprecated (combat are now added immediatelly since there's no script run too long)
+				_detalhes.schedule_flag_boss_components = false
+				_detalhes:FlagActorsOnBossFight()
+			end
+			
+			if (_detalhes.schedule_remove_overall) then --deprecated (combat are now added immediatelly since there's no script run too long)
+				if (_detalhes.debug) then
+					_detalhes:Msg ("(debug) found schedule overall data clean up.")
+				end
+				_detalhes.schedule_remove_overall = false
+				_detalhes.tabela_historico:resetar_overall()
+			end
+
+			if (_detalhes.wipe_called and false) then --disabled
+				_detalhes.wipe_called = nil
+				_detalhes:CaptureSet (nil, "damage", true)
+				_detalhes:CaptureSet (nil, "energy", true)
+				_detalhes:CaptureSet (nil, "aura", true)
+				_detalhes:CaptureSet (nil, "energy", true)
+				_detalhes:CaptureSet (nil, "spellcast", true)
+				
+				_detalhes:CaptureSet (false, "damage", false, 10)
+				_detalhes:CaptureSet (false, "energy", false, 10)
+				_detalhes:CaptureSet (false, "aura", false, 10)
+				_detalhes:CaptureSet (false, "energy", false, 10)
+				_detalhes:CaptureSet (false, "spellcast", false, 10)
+			end
+		end
+
 
 	end
 	
+	function _detalhes.parser_functions:CHALLENGE_MODE_START (...)
+		--> send mythic dungeon start event
+		local zoneName, instanceType, difficultyID, difficultyName, maxPlayers, dynamicDifficulty, isDynamic, instanceMapID, instanceGroupSize = GetInstanceInfo()
+		if (difficultyID == 8) then
+			_detalhes:SendEvent ("COMBAT_MYTHICDUNGEON_START")
+		end
+	
+	end
+	
+	function _detalhes.parser_functions:CHALLENGE_MODE_COMPLETED (...)
+		--> send mythic dungeon end event
+		local zoneName, instanceType, difficultyID, difficultyName, maxPlayers, dynamicDifficulty, isDynamic, instanceMapID, instanceGroupSize = GetInstanceInfo()
+		if (difficultyID == 8) then
+			_detalhes:SendEvent ("COMBAT_MYTHICDUNGEON_END")
+		end
+		
+	end
+
 	function _detalhes.parser_functions:PLAYER_REGEN_ENABLED (...)
 
 		if (_detalhes.debug) then

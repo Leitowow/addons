@@ -126,7 +126,7 @@ L.EMOTE_STRING={
 };
 L.WTG_STRING={
 	FORMAT_WELCOME=[[
-		欢迎
+		欢迎到来
 	]],
 	FORMAT_BROADCAST="新公会成员：%1$s Lv-%3$s %2$s",--name,class,level,area,achievement points
 	WTG_STRING_1="\124cffffffff入会欢迎语\124r",

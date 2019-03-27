@@ -1,4 +1,4 @@
- --Plater main software file
+--Plater main software file
 
 --Calls with : are functions imported from the framework
 --whenever a variable or function has a --private comment attached to it, means scripts cannot access it (read, write, override), anything else can be overriden with scripts
@@ -240,7 +240,7 @@ Plater.HookScriptsDesc = { --private
 	["Player Talent Update"] = "When the player changes a talent or specialization.\n\n|cFF44FF44Run on all nameplates shown in the screen|r.",
 	
 	["Health Update"] = "When the health of the unit changes.",
-	["Zone Changed"] = "Run when the moves to a different map map.",
+	["Zone Changed"] = "Run when the player enter into a new zone.\n\n|cFF44FF44Run on all nameplates already created, on screen or not|r.",
 }
 
 --> addon comm
@@ -355,6 +355,7 @@ Plater.Media = {
 		[[Interface\AddOns\Plater\media\checked_64]],
 		[[Interface\AddOns\Plater\media\sphere_full_64]],
 		[[Interface\AddOns\Plater\media\eye_64]],
+		[[Interface\AddOns\Plater\media\cross_64]],
 	},
 }
 
@@ -1596,6 +1597,36 @@ Plater.DefaultSpellRangeList = {
 	--frame which will receive events
 	Plater.EventHandlerFrame = CreateFrame ("frame") --private
 
+	--schedule zone change
+	local run_zonechanged_hook = function()
+		if (HOOK_ZONE_CHANGED.ScriptAmount > 0) then
+			--for _, plateFrame in ipairs (Plater.GetAllShownPlates()) do
+			local globalScope = _G
+			for i = 1, 40 do
+				--run on all nameplates already created
+				local plateFrame = globalScope ["NamePlate" .. i]
+				if (plateFrame) then
+					for i = 1, HOOK_ZONE_CHANGED.ScriptAmount do
+						local globalScriptObject = HOOK_ZONE_CHANGED [i]
+						local unitFrame = plateFrame.unitFrame
+						local scriptContainer = unitFrame:ScriptGetContainer()
+						local scriptInfo = unitFrame:ScriptGetInfo (globalScriptObject, scriptContainer, "Zone Changed")
+						--run
+						unitFrame:ScriptRunHook (scriptInfo, "Zone Changed")
+					end
+				else
+					break
+				end
+			end
+		end	
+	end
+	function Plater.ScheduleZoneChangeHook()
+		if (Plater.ScheduledZoneChangeTriggerHook) then
+			Plater.ScheduledZoneChangeTriggerHook:Cancel()
+		end
+		Plater.ScheduledZoneChangeTriggerHook = C_Timer.NewTimer (2, run_zonechanged_hook)
+	end
+	
 	--store all functions for all events that will be registered inside OnInit
 	local eventFunctions = {
 		--when a unit from unatackable change its state, this event triggers several times, a schedule is used to only update once
@@ -1848,18 +1879,7 @@ Plater.DefaultSpellRangeList = {
 			Plater.RefreshAutoToggle()
 			
 			--hook
-			if (HOOK_ZONE_CHANGED.ScriptAmount > 0) then
-				for _, plateFrame in ipairs (Plater.GetAllShownPlates()) do
-					for i = 1, HOOK_ZONE_CHANGED.ScriptAmount do
-						local globalScriptObject = HOOK_ZONE_CHANGED [i]
-						local unitFrame = plateFrame.unitFrame
-						local scriptContainer = unitFrame:ScriptGetContainer()
-						local scriptInfo = unitFrame:ScriptGetInfo (globalScriptObject, scriptContainer, "Zone Changed")
-						--run
-						unitFrame:ScriptRunHook (scriptInfo, "Zone Changed")
-					end
-				end
-			end
+			Plater.ScheduleZoneChangeHook()
 		end,
 
 		ZONE_CHANGED_INDOORS = function()
@@ -2038,6 +2058,9 @@ Plater.DefaultSpellRangeList = {
 			--> create the animations when the unit goes out of range
 			Plater.CreateAlphaAnimation (plateFrame)
 			
+			--store custom indicators
+			plateFrame.unitFrame.CustomIndicators = {}
+			
 			--> cliclable area debug
 				plateFrame.debugAreaTexture = plateFrame:CreateTexture (nil, "background")
 				plateFrame.debugAreaTexture:SetColorTexture (.1, .1, .1, .834)
@@ -2097,6 +2120,12 @@ Plater.DefaultSpellRangeList = {
 			--> create the highlight texture (when the mouse passes over the nameplate and receives a highlight)
 				Plater.CreateHighlightNameplate (plateFrame)
 
+			--> health bar overlay
+				--> create an overlay frame that sits just above the health bar
+				--this is ideal for adding borders and other overlays
+				healthBar.FrameOverlay = CreateFrame ("frame", "$parentOverlayFrame", healthBar)
+				healthBar.FrameOverlay:SetAllPoints()
+			
 			--> execute range textures and animations
 				--health cutoff texture shown inside the health bar
 				local healthCutOff = healthBar:CreateTexture (nil, "overlay")
@@ -2359,7 +2388,7 @@ Plater.DefaultSpellRangeList = {
 				end
 		end,
 
-		-- ~added �dded
+		-- ~added ~�dded
 		NAME_PLATE_UNIT_ADDED = function (event, unitBarId)
 		
 			local plateFrame = C_NamePlate.GetNamePlateForUnit (unitBarId)
@@ -2485,6 +2514,8 @@ Plater.DefaultSpellRangeList = {
 			unitFrame [MEMBER_CLASSIFICATION] = plateFrame [MEMBER_CLASSIFICATION]
 			unitFrame [MEMBER_UNITID] = unitID
 			unitFrame.namePlateThreatPercent = 0
+			unitFrame.namePlateThreatIsTanking = nil
+			unitFrame.namePlateThreatStatus = nil
 			
 			--get and format the reaction to always be the value of the constants, then cache the reaction in some widgets for performance
 			local reaction = UnitReaction (unitID, "player") or 1
@@ -2497,7 +2528,10 @@ Plater.DefaultSpellRangeList = {
 			unitFrame.BuffFrame.unit = unitID
 			unitFrame.BuffFrame2.unit = unitID
 			
-			--> sending true to force the color update when the color overrider is enabled
+			--clear the custom indicators table
+			wipe (unitFrame.CustomIndicators)
+			
+			--sending true to force the color update when the color overrider is enabled
 			Plater.FindAndSetNameplateColor (unitFrame, true)
 			
 			--health amount
@@ -2589,6 +2623,12 @@ Plater.DefaultSpellRangeList = {
 							if (DB_CASTBAR_HIDE_ENEMIES) then
 								CastingBarFrame_SetUnit (castBar, nil, nil, nil)
 							end
+							
+							--get threat situation to expose it to scripts already in the nameplate added hook
+							local isTanking, threatStatus, threatpct = UnitDetailedThreatSituation ("player", unitID)
+							unitFrame.namePlateThreatIsTanking = isTanking
+							unitFrame.namePlateThreatStatus = threatStatus
+							unitFrame.namePlateThreatPercent = threatpct or 0
 						end
 					end
 				end
@@ -2898,6 +2938,8 @@ function Plater.OnInit() --private
 			
 			--wait more time for the talents information be received from the server
 			C_Timer.After (4, Plater.GetHealthCutoffValue)
+			
+			C_Timer.After (2, Plater.ScheduleZoneChangeHook)
 			
 			--if the user just used a /reload to enable ui parenting, auto adjust the fine tune scale
 			--the uiparent fine tune scale initially: after testing and playing around with it, I think it should be 1 / UIParent:GetEffectiveScale() and scaling should be done by multiplying defaultScale * scaleFineTune
@@ -4370,6 +4412,13 @@ end
 				--check if the debuff isn't filtered out
 				elseif (not DB_DEBUFF_BANNED [name]) then
 			
+					--> if true it'll show all auras - this can be called from scripts to debug aura things
+					if (Plater.DebugAuras) then
+						if (duration and duration < 60) then
+							can_show_this_debuff = true
+						end
+					end
+			
 					--> important aura
 					if (DB_AURA_SHOW_IMPORTANT and (nameplateShowAll or isBossDebuff)) then
 						can_show_this_debuff = true
@@ -4411,7 +4460,15 @@ end
 					break
 				
 				elseif (not DB_BUFF_BANNED [name]) then
-
+				
+					--> if true it'll show all auras - this can be called from scripts to debug aura things
+					if (Plater.DebugAuras) then
+						if (duration and duration < 60) then
+							local auraIconFrame, buffFrame = Plater.GetAuraIcon (self, true)
+							Plater.AddAura (buffFrame, auraIconFrame, i, name, texture, count, debuffType, duration, expirationTime, caster, canStealOrPurge, nameplateShowPersonal, spellId, true)
+						end
+					end
+				
 					--> important aura
 					if (DB_AURA_SHOW_IMPORTANT and (nameplateShowAll or isBossDebuff)) then
 						local auraIconFrame, buffFrame = Plater.GetAuraIcon (self, true)
@@ -5114,6 +5171,9 @@ end
 		
 		local isTanking, threatStatus, threatpct = UnitDetailedThreatSituation ("player", self.displayedUnit)
 		
+		--expose all threat situation to scripts
+		self.namePlateThreatIsTanking = isTanking
+		self.namePlateThreatStatus = threatStatus
 		self.namePlateThreatPercent = threatpct or 0
 		-- (3 = securely tanking, 2 = insecurely tanking, 1 = not tanking but higher threat than tank, 0 = not tanking and lower threat than tank)
 		
@@ -6494,6 +6554,11 @@ end
 				Plater.AddIndicator (plateFrame, "quest")
 			end
 		end
+		
+		--custom indicators from scripts
+		for i = 1, #plateFrame.unitFrame.CustomIndicators do
+			Plater.AddIndicator (plateFrame, "custom", unpack (plateFrame.unitFrame.CustomIndicators [i]))
+		end
 	end
 
 	function Plater.AddIndicator (plateFrame, indicator, ...)
@@ -6512,6 +6577,7 @@ end
 		thisIndicator:SetVertexColor (1, 1, 1)
 		thisIndicator:SetDesaturated (false)
 		thisIndicator:SetSize (10, 10)
+		thisIndicator:SetScale (Plater.db.profile.indicator_scale)
 		
 		-- ~icons
 		if (indicator == "pet") then
@@ -6556,7 +6622,14 @@ end
 		
 		elseif (indicator == "worldboss") then
 			thisIndicator:SetTexture ([[Interface\Scenarios\ScenarioIcon-Boss]])
-			
+		
+		elseif (indicator == "custom") then
+			local texture, width, height, color, L, R, T, B = ...
+			thisIndicator:SetTexture (texture)
+			thisIndicator:SetSize (width, height)
+			thisIndicator:SetTexCoord (L, R, T, B)
+			local r, g, b = DF:ParseColors (color)
+			thisIndicator:SetVertexColor (r, g, b)
 		end
 		
 		if (plateFrame.IconIndicators.Next == 1) then
@@ -7678,7 +7751,7 @@ end
 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
---> API ~API �pi
+--> API ~API ~�pi
 
 	--attempt to get the role of the unit shown in the nameplate
 	function Plater.GetUnitRole (unitFrame)
@@ -7734,6 +7807,90 @@ end
 	--refresh the frame strata and frame level when using UIParent as the parent
 	function Plater.RefreshNameplateStrata (unitFrame)
 		return Plater.UpdateUIParentLevels (unitFrame)
+	end
+	
+	--add an extra indicator
+	function Plater.ShowIndicator (unitFrame, texture, width, height, color, L, R, T, B)
+		tinsert (unitFrame.CustomIndicators, {texture or "", width or 12, height or 12, color or "white", L or 0, R or 1, T or 0, B or 1})
+		Plater.UpdateIndicators (unitFrame.PlateFrame, unitFrame.ActorType)
+	end
+	
+	--allow scripts to perform safe cvars changes with backup of default values
+	--PostponeCVarChange stores cvars scheduled to be changed after the combat lockdown drops
+	Plater.PostponeSetCVar = {}
+	local postpone_set_cvar = function (timerObject)
+		local variableName, value = timerObject.variableName, timerObject.value
+		Plater.PostponeSetCVar [variableName] = nil
+		Plater.SafeSetCVar (variableName, value)
+	end
+	
+	function Plater.SafeSetCVar (variableName, value)
+		--check if is a valid cvar
+		if (GetCVar (variableName) == nil) then
+			Plater:Msg ("invalid cvar for Plater.SafeSetCVar()")
+			return
+		end
+		
+		--check if there's a scheduled change for this cvar and cancel it
+		if (Plater.PostponeSetCVar [variableName]) then
+			Plater.PostponeSetCVar [variableName]:Cancel()
+			Plater.PostponeSetCVar [variableName] = nil
+		end
+		
+		--check if is in combat, if is, schedule to change this cvar after the lockdown drop
+		if (InCombatLockdown()) then
+			local timerObject = C_Timer.NewTimer (0.5, postpone_set_cvar)
+			timerObject.variableName = variableName
+			timerObject.value = value
+			Plater.PostponeSetCVar [variableName] = timerObject
+			return true
+		end
+		
+		--store the default value if there's no default value set yet
+		local cvarCache = Plater.db.profile.cvar_default_cache
+		if (cvarCache [variableName] == nil) then
+			cvarCache [variableName] = GetCVar (variableName)
+		end
+		
+		SetCVar (variableName, value)
+		return true
+	end
+	
+	Plater.PostponeRestoreCVar = {}
+	local postpone_restore_cvar = function (timerObject)
+		local variableName = timerObject.variableName
+		Plater.PostponeRestoreCVar [variableName] = nil
+		Plater.RestoreCVar (variableName)
+	end
+	
+	function Plater.RestoreCVar (variableName)
+		--check if is a valid cvar
+		if (GetCVar (variableName) == nil) then
+			Plater:Msg ("invalid cvar for Plater.SafeSetCVar()")
+			return
+		end
+		
+		--check if there's a scheduled change for this cvar and cancel it
+		if (Plater.PostponeRestoreCVar [variableName]) then
+			Plater.PostponeRestoreCVar [variableName]:Cancel()
+			Plater.PostponeRestoreCVar [variableName] = nil
+		end
+		
+		--check if is in combat, if is, schedule to change this cvar after the lockdown drop
+		if (InCombatLockdown()) then
+			local timerObject = C_Timer.NewTimer (0.5, postpone_restore_cvar)
+			timerObject.variableName = variableName
+			Plater.PostponeRestoreCVar [variableName] = timerObject
+			return true
+		end
+
+		--restore the value
+		local cvarCache = Plater.db.profile.cvar_default_cache
+		if (cvarCache [variableName]) then
+			SetCVar (variableName, cvarCache [variableName])
+			cvarCache [variableName] = nil
+			return true
+		end
 	end
 	
 	--return if the unit is in the friends list
